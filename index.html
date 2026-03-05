@@ -627,14 +627,14 @@
             explanation: 'Character-level tokenization would create sequences 4-8x longer (1 token = 1 char). Word-level would need massive vocabularies (millions for English). Subword (BPE, WordPiece, SentencePiece) balances this - typical 30K-50K vocabularies with reasonable sequence lengths.'
           },
           {
-            q: 'For a model priced at $3/M input tokens and $15/M output tokens, what is the cost ratio?',
+            q: 'What is the main reason output tokens cost more than input tokens in LLM APIs?',
             options: [
-              { a: 'A', text: '1:5' },
-              { a: 'B', text: '1:1' },
-              { a: 'C', text: '5:1', correct: true },
-              { a: 'D', text: '15:3' }
+              { a: 'A', text: 'Output requires more compute' },
+              { a: 'B', text: 'Output tokens are generated one-by-one (autoregressive), each needing a full forward pass', correct: true },
+              { a: 'C', text: 'Output is charged for storage' },
+              { a: 'D', text: 'Output requires more memory' }
             ],
-            explanation: 'Output tokens cost 5x more ($15/$3 = 5:1) because generation is autoregressive - each output token requires a full forward pass through the model. Input tokens are processed in parallel in a single pass. This is why long system prompts impact cost significantly.'
+            explanation: 'Input tokens are processed in parallel in a single forward pass. Output tokens are generated one-by-one autoregressively - each token requires a full forward pass through the model. For a 100-token output, the model runs ~100 forward passes vs 1 for the input.'
           },
           {
             q: 'What causes the "context is wasted" problem in LLM APIs?',
