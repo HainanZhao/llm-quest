@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LLM Quest: Become an AI Wizard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #1a0a2e;
+      --bg-card: #2d1b4e;
+      --accent-purple: #9b4dca;
+      --accent-blue: #00d4ff;
+      --accent-orange: #ff6b35;
+      --accent-green: #00ff88;
+      --text-light: #f0e6ff;
+      --text-muted: #a89ec9;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-light);
+      min-height: 100vh;
+      background-image: 
+        radial-gradient(ellipse at top, #2d1b4e 0%, transparent 50%),
+        radial-gradient(circle at 20% 80%, rgba(155,77,202,0.1) 0%, transparent 30%),
+        radial-gradient(circle at 80% 20%, rgba(0,212,255,0.1) 0%, transparent 30%);
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Welcome Screen */
+    #welcome {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    h1 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: clamp(1.2rem, 4vw, 2rem);
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+      text-shadow: 0 0 30px rgba(155,77,202,0.5);
+    }
+
+    .tagline {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-bottom: 40px;
+    }
+
+    .wizard-avatar {
+      font-size: 80px;
+      margin-bottom: 30px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    .btn {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.9rem;
+      padding: 18px 40px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+      color: white;
+      box-shadow: 0 4px 20px rgba(155,77,202,0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(155,77,202,0.6);
+    }
+
+    /* Level Selection */
+    #levels {
+      display: none;
+    }
+
+    .levels-title {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 1rem;
+      text-align: center;
+      margin-bottom: 30px;
+      color: var(--accent-blue);
+    }
+
+    .level-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .level-card {
+      background: var(--bg-card);
+      border-radius: 15px;
+      padding: 20px 15px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .level-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue));
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .level-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .level-card.locked {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .level-card.completed {
+      border-color: var(--accent-green);
+    }
+
+    .level-card.completed::after {
+      content: '✓';
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      color: var(--accent-green);
+      font-weight: bold;
+    }
+
+    .level-icon {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    .level-name {
+      font-weight: 700;
+      font-size: 0.85rem;
+      margin-bottom: 5px;
+    }
+
+    .level-topic {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    /* Game Screen */
+    #game {
+      display: none;
+    }
+
+    .progress-bar {
+      background: var(--bg-card);
+      height: 8px;
+      border-radius: 4px;
+      margin-bottom: 25px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue));
+      transition: width 0.5s ease;
+    }
+
+    .level-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .level-badge {
+      font-size: 2.5rem;
+    }
+
+    .level-info h2 {
+      font-size: 1.3rem;
+      margin-bottom: 5px;
+    }
+
+    .level-info .topic {
+      color: var(--accent-orange);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .story-box {
+      background: linear-gradient(135deg, rgba(155,77,202,0.2), rgba(0,212,255,0.1));
+      border-left: 4px solid var(--accent-purple);
+      padding: 20px;
+      border-radius: 0 15px 15px 0;
+      margin-bottom: 25px;
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    .content-box {
+      background: var(--bg-card);
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 25px;
+    }
+
+    .content-box h3 {
+      color: var(--accent-blue);
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+    }
+
+    .content-box ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .content-box li {
+      padding: 8px 0;
+      padding-left: 25px;
+      position: relative;
+    }
+
+    .content-box li::before {
+      content: '✨';
+      position: absolute;
+      left: 0;
+    }
+
+    .quiz-section {
+      background: var(--bg-card);
+      border-radius: 15px;
+      padding: 25px;
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .quiz-title {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.8rem;
+      color: var(--accent-orange);
+    }
+
+    .quiz-progress {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .question {
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option {
+      background: var(--bg-dark);
+      border: 2px solid transparent;
+      border-radius: 12px;
+      padding: 15px 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
+    }
+
+    .option:hover {
+      border-color: var(--accent-purple);
+      transform: translateX(5px);
+    }
+
+    .option.selected {
+      border-color: var(--accent-blue);
+      background: rgba(0,212,255,0.1);
+    }
+
+    .option.correct {
+      border-color: var(--accent-green);
+      background: rgba(0,255,136,0.1);
+    }
+
+    .option.wrong {
+      border-color: #ff4757;
+      background: rgba(255,71,87,0.1);
+      animation: shake 0.4s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    .option-letter {
+      font-weight: 700;
+      color: var(--accent-purple);
+      margin-right: 10px;
+    }
+
+    .explanation {
+      margin-top: 20px;
+      padding: 15px;
+      background: rgba(0,212,255,0.1);
+      border-radius: 10px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      display: none;
+    }
+
+    .explanation.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .btn-retry {
+      margin-top: 15px;
+      background: var(--accent-orange);
+      color: white;
+      padding: 12px 30px;
+      font-size: 0.8rem;
+    }
+
+    /* Victory Screen */
+    #victory {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .victory-icon {
+      font-size: 80px;
+      margin-bottom: 20px;
+      animation: bounce 1s ease infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .victory-title {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 1.2rem;
+      background: linear-gradient(135deg, var(--accent-orange), var(--accent-green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+
+    .victory-text {
+      color: var(--text-muted);
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    .back-btn {
+      background: transparent;
+      border: 2px solid var(--accent-purple);
+      color: var(--accent-purple);
+      padding: 12px 25px;
+      font-size: 0.8rem;
+    }
+
+    /* Confetti */
+    .confetti {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      animation: confetti-fall 3s ease-out forwards;
+    }
+
+    @keyframes confetti-fall {
+      0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* Navigation */
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+
+    .back-level-btn {
+      background: transparent;
+      border: 2px solid var(--text-muted);
+      color: var(--text-muted);
+      padding: 10px 20px;
+      font-size: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Welcome Screen -->
+    <div id="welcome">
+      <div class="wizard-avatar">🧙</div>
+      <h1>LLM Quest</h1>
+      <p class="tagline">"Learn the magic of LLMs, one spell at a time!"</p>
+      <button class="btn btn-primary" onclick="showLevels()">Begin Journey</button>
+    </div>
+
+    <!-- Level Selection -->
+    <div id="levels">
+      <h2 class="levels-title">✨ Choose Your Path ✨</h2>
+      <div class="level-grid" id="levelGrid"></div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="level-header">
+        <div class="level-badge" id="levelBadge">🌱</div>
+        <div class="level-info">
+          <h2 id="levelTitle">The Spark</h2>
+          <span class="topic" id="levelTopic">LLM Fundamentals</span>
+        </div>
+      </div>
+      <div class="story-box" id="storyBox"></div>
+      <div class="content-box" id="contentBox"></div>
+      <div class="quiz-section">
+        <div class="quiz-header">
+          <span class="quiz-title">🪄 Cast Your Spell</span>
+          <span class="quiz-progress" id="quizProgress">Question 1/3</span>
+        </div>
+        <div id="quizContent"></div>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn back-level-btn" onclick="showLevels()">← Back to Levels</button>
+      </div>
+    </div>
+
+    <!-- Victory Screen -->
+    <div id="victory">
+      <div class="victory-icon">🏆</div>
+      <h2 class="victory-title">You're an AI Wizard!</h2>
+      <p class="victory-text">
+        Congratulations! You've mastered the core concepts of LLMs and AI agents.<br><br>
+        You've learned about transformers, tokens, embeddings, MCP, skills, and prompt engineering.<br><br>
+        Your journey continues with advanced topics like RAG, fine-tuning, and multimodal AI!
+      </p>
+      <button class="btn btn-primary" onclick="showLevels()">Play Again</button>
+    </div>
+  </div>
+
+  <div class="confetti" id="confetti"></div>
+
+  <script>
+    // Game Data
+    const levels = [
+      {
+        id: 1,
+        icon: '🌱',
+        name: 'The Spark',
+        topic: 'LLM Fundamentals',
+        story: 'Every wizard needs to understand their power source. Learn what makes Large Language Models tick!',
+        content: `
+          <h3>What is an LLM?</h3>
+          <ul>
+            <li><strong>LLM</strong> = Large Language Model - a neural network trained on massive text data</li>
+            <li>LLMs learn to predict the <strong>next word</strong> given previous words</li>
+            <li>Training = learning patterns from data; Inference = using the model to generate</li>
+            <li>They don't "know" facts - they predict likely next tokens based on patterns</li>
+          </ul>
+        `,
+        questions: [
+          {
+            q: 'What does LLM stand for?',
+            options: [
+              { a: 'A', text: 'Large Language Model', correct: true },
+              { a: 'B', text: 'Long Learning Machine' },
+              { a: 'C', text: 'Local Language Memory' },
+              { a: 'D', text: 'Linear Logic Matrix' }
+            ],
+            explanation: 'LLM stands for Large Language Model - a type of AI trained on vast amounts of text data.'
+          },
+          {
+            q: 'How do LLMs typically generate text?',
+            options: [
+              { a: 'A', text: 'By copying from training data' },
+              { a: 'B', text: 'By predicting the next most likely word', correct: true },
+              { a: 'C', text: 'By using hard-coded responses' },
+              { a: 'D', text: 'By connecting to a search engine' }
+            ],
+            explanation: 'LLMs generate text by predicting the next most likely token (word) based on probability distributions learned during training.'
+          },
+          {
+            q: 'What is the difference between training and inference?',
+            options: [
+              { a: 'A', text: 'They are the same thing' },
+              { a: 'B', text: 'Training = learning from data, inference = using the model', correct: true },
+              { a: 'C', text: 'Inference is more expensive' },
+              { a: 'D', text: 'Training requires more memory' }
+            ],
+            explanation: 'Training is when the model learns from data (lots of computation). Inference is when we use the trained model to generate responses.'
+          }
+        ]
+      },
+      {
+        id: 2,
+        icon: '📜',
+        name: 'The Scroll',
+        topic: 'Context Window',
+        story: 'The Scroll has limits - your AI can only read so much at once!',
+        content: `
+          <h3>Understanding Context Window</h3>
+          <ul>
+            <li><strong>Context window</strong> = maximum text an LLM can see at once</li>
+            <li>Typical sizes: 4K, 8K, 32K, 128K, 1M tokens</li>
+            <li>When exceeded, <strong>oldest text gets truncated</strong></li>
+            <li>Longer context = slower and more expensive</li>
+          </ul>
+        `,
+        questions: [
+          {
+            q: 'What is a context window?',
+            options: [
+              { a: 'A', text: 'The UI where you type messages' },
+              { a: 'B', text: 'The maximum amount of text an LLM can see at once', correct: true },
+              { a: 'C', text: 'The response length limit' },
+              { a: 'D', text: 'A scrolling text animation' }
+            ],
+            explanation: 'Context window is the maximum number of tokens (words/characters) the LLM can process in a single request.'
+          },
+          {
+            q: 'What happens when you exceed the context limit?',
+            options: [
+              { a: 'A', text: 'The model crashes' },
+              { a: 'B', text: 'It starts hallucinating more' },
+              { a: 'C', text: 'The oldest text gets truncated', correct: true },
+              { a: 'D', text: 'It automatically upgrades' }
+            ],
+            explanation: 'When context is exceeded, the oldest parts of the conversation are typically dropped to fit new content.'
+          },
+          {
+            q: 'Why might a shorter context be better?',
+            options: [
+              { a: 'A', text: "It's not - always better to have more" },
+              { a: 'B', text: 'Faster and cheaper', correct: true },
+              { a: 'C', text: 'It improves accuracy' },
+              { a: 'D', text: 'It reduces hallucinations' }
+            ],
+            explanation: 'Shorter context means faster processing and lower costs - important for high-volume applications.'
+          }
+        ]
+      },
+      {
+        id: 3,
+        icon: '💎',
+        name: 'The Gem',
+        topic: 'Tokens & Pricing',
+        story: 'Gems are precious - each token costs! Learn to use them wisely.',
+        content: `
+          <h3>Understanding Tokens</h3>
+          <ul>
+            <li><strong>Token</strong> ≈ 4 characters or 0.75 words</li>
+            <li>Pricing is per 1M tokens (input & output often different)</li>
+            <li>Rate limits restrict requests per minute</li>
+            <li>Optimizing prompts = saving money!</li>
+          </ul>
+        `,
+        questions: [
+          {
+            q: 'What is a "token" in LLM terms?',
+            options: [
+              { a: 'A', text: 'A special authentication key' },
+              { a: 'B', text: 'A chunk of text (roughly 4 characters)', correct: true },
+              { a: 'C', text: 'A complete sentence' },
+              { a: 'D', text: 'An API key' }
+            ],
+            explanation: 'A token is roughly 4 characters or 0.75 of a word - it\'s the basic unit the LLM processes.'
+          },
+          {
+            q: 'How are tokens usually counted?',
+            options: [
+              { a: 'A', text: 'By words (1 word = 1 token)' },
+              { a: 'B', text: 'Roughly 0.75 words per token', correct: true },
+              { a: 'C', text: 'By characters' },
+              { a: 'D', text: 'By sentences' }
+            ],
+            explanation: 'Tokenizers typically convert about 0.75 words into 1 token, though it varies by language and model.'
+          },
+          {
+            q: 'Why do longer prompts cost more?',
+            options: [
+              { a: 'A', text: "They don't" },
+              { a: 'B', text: 'Because the model processes more tokens', correct: true },
+              { a: 'C', text: 'Only responses cost money' },
+              { a: 'D', text: "It's a fixed price" }
+            ],
+            explanation: 'Both input and output tokens count toward cost - more text = more tokens = more money.'
+          }
+        ]
+      },
+      {
+        id: 4,
+        icon: '⚙️',
+        name: 'The Transformer',
+        topic: 'Architecture',
+        story: 'The Transformer is the ancient spell that changed everything. Master its secrets!',
+        content: `
+          <h3>Transformer Architecture</h3>
+          <ul>
+            <li><strong>Attention mechanism</strong> identifies important relationships between words</li>
+            <li>Self-attention: words relate to ALL other words in the sequence</li>
+            <li>Parallel processing = much faster than older RNN/LSTM approaches</li>
+            <li>Foundation of modern LLMs (GPT, Claude, Gemini, etc.)</li>
+          </ul>
+        `,
+        questions: [
+          {
+            q: 'What is the attention mechanism?',
+            options: [
+              { a: 'A', text: "How the AI pays attention to user instructions" },
+              { a: 'B', text: 'A way to identify important words in context', correct: true },
+              { a: 'C', text: 'The focus mode in training' },
+              { a: 'D', text: 'A type of neural network layer' }
+            ],
+            explanation: 'Attention allows the model to weigh the importance of different parts of the input when generating output.'
+          },
+          {
+            q: 'What can attention "attend" to?',
+            options: [
+              { a: 'A', text: 'Only the previous word' },
+              { a: 'B', text: 'Any position in the input sequence', correct: true },
+              { a: 'C', text: 'Only user messages' },
+              { a: 'D', text: 'External databases' }
+            ],
+            explanation: 'Self-attention allows each word to look at every other word in the sequence to understand relationships.'
+          },
+          {
+            q: 'Why are transformers efficient?',
+            options: [
+              { a: 'A', text: 'They use less memory than older models' },
+              { a: 'B', text: 'They can process all words in parallel', correct: true },
+              { a: 'C', text: "They don't need GPUs" },
+              { a: 'D', text: "They're smaller than RNNs" }
+            ],
+            explanation: 'Unlike sequential models (RNNs), transformers process all tokens simultaneously - enabling massive parallelism.'
+          }
+        ]
+      },
+      {
+        id: 5,
+        icon: '🧮',
+        name: 'The Embedding',
+        topic: 'Vector Space',
+        story: 'Everything exists as a point in the magical embedding space!',
+        content: `
+          <h3>Understanding Embeddings</h3>
+          <ul>
+            <li>Words converted to <strong>number vectors</strong> (e.g., 768 dimensions)</li>
+            <li>Similar meanings = similar directions in space</li>
+            <li>Enables <strong>semantic search</strong> (find "king" by asking for "royalty")</li>
+            <li>Foundations of RAG and similarity systems</li>
+          </ul>
+        `,
+        questions: [
+          {
+            q: 'What is an embedding?',
+            options: [
+              { a: 'A', text: 'A type of API call' },
+              { a: 'B', text: 'A list of numbers representing meaning', correct: true },
+              { a: 'C', text: 'A memory compression technique' },
+              { a: 'D', text: 'A text format' }
+            ],
+            explanation: 'An embedding is a numerical representation of text as a vector of numbers that captures semantic meaning.'
+          },
+          {
+            q: 'Why do embeddings enable semantic search?',
+            options: [
+              { a: 'A', text: "They're faster than text" },
+              { a: 'B', text: 'Similar meanings have similar vectors', correct: true },
+              { a: 'C', text: 'They compress data' },
+              { a: 'D', text: "They're encrypted" }
+            ],
+            explanation: 'Because similar concepts have vectors pointing in similar directions, we can find related items by measuring vector distance.'
+          },
+          {
+            q: "What's the typical dimensionality of embeddings?",
+            options: [
+              { a: 'A', text: '1-10' },
+              { a: 'B', text: '100' },
+              { a: 'C', text: '384-4096', correct: true },
+              { a: 'D', text: '1M+' }
+            ],
+            explanation: 'Common embedding models output vectors with 384 to 4096 dimensions (e.g., ada-002 uses 1536).'
+          }
+        ]
+      },
+      {
+        id: 6,
+        icon: '🔗',
+        name: 'The Protocol',
+        topic: 'MCP',
+        story: 'MCP is the Universal Translator between your AI and the world!',
+        content: `
+          <h3>Model Context Protocol (MCP)</h3>
+          <ul>
+            <li><strong>MCP</strong> = Model Context Protocol</li>
+            <li>Enables LLMs to call external tools and APIs</li>
+            <li>Standardized way to extend AI capabilities</li>
+            <li>Skills define what tools the AI can use</li>
+          </ul>
+        `,
+        questions: [
+          {
+            q: 'What does MCP stand for?',
+            options: [
+              { a: 'A', text: 'Multi-Component Processing' },
+              { a: 'B', text: 'Model Context Protocol', correct: true },
+              { a: 'C', text: 'Memory Cache Protocol' },
+              { a: 'D', text: 'Message Control Program' }
+            ],
+            explanation: 'MCP = Model Context Protocol, a standard for enabling LLMs to interact with external tools and data sources.'
+          },
+          {
+            q: 'What can MCP enable for an LLM?',
+            options: [
+              { a: 'A', text: 'Only text generation' },
+              { a: 'B', text: 'Calling external tools and APIs', correct: true },
+              { a: 'C', text: 'Reducing costs' },
+              { a: 'D', text: 'Faster training' }
+            ],
+            explanation: 'MCP allows LLMs to break out of their "black box" and interact with real-world systems, databases, and APIs.'
+          },
+          {
+            q: 'Why is MCP standardization valuable?',
+            options: [
+              { a: 'A', text: "It's not important" },
+              { a: 'B', text: 'It lets any AI use any tool consistently', correct: true },
+              { a: 'C', text: "It's required by law" },
+              { a: 'D', text: 'It reduces token usage' }
+            ],
+            explanation: 'Standardization means tools work the same way across different AI systems - no more custom integrations per model.'
+          }
+        ]
+      },
+      {
+        id: 7,
+        icon: '🧙',
+        name: 'The Master',
+        topic: 'Skills & Subagents',
+        story: 'A true wizard commands an army of assistants!',
+        content: `
+          <h3>Skills and Subagents</h3>
+          <ul>
+            <li><strong>Skills</strong> = reusable capability definitions</li>
+            <li><strong>Subagents</strong> = delegate to specialized, smaller agents</li>
+            <li>Enable parallel processing and specialized expertise</li>
+            <li>Key to building powerful agentic AI systems</li>
+          </ul>
+        `,
+        questions: [
+          {
+            q: 'What is a "skill" in agent frameworks?',
+            options: [
+              { a: 'A', text: 'A programming language' },
+              { a: 'B', text: 'A reusable capability definition', correct: true },
+              { a: 'C', text: 'A type of model' },
+              { a: 'D', text: 'An API endpoint' }
+            ],
+            explanation: 'A skill defines a capability - what the agent can do, how it works, and what tools it has access to.'
+          },
+          {
+            q: 'What are subagents used for?',
+            options: [
+              { a: 'A', text: 'Making the main agent faster' },
+              { a: 'B', text: 'Delegating to specialized, smaller agents', correct: true },
+              { a: 'C', text: 'Storing conversation history' },
+              { a: 'D', text: 'Reducing costs' }
+            ],
+            explanation: 'Subagents let you break complex tasks into smaller pieces handled by specialized agents.'
+          },
+          {
+            q: "What's the benefit of agent delegation?",
+            options: [
+              { a: 'A', text: "It's more accurate" },
+              { a: 'B', text: 'Parallel processing and specialized expertise', correct: true },
+              { a: 'C', text: 'It costs less' },
+              { a: 'D', text: 'It requires no setup' }
+            ],
+            explanation: 'Delegation enables parallel execution and lets each subagent focus on its specialty for better results.'
+          }
+        ]
+      },
+      {
+        id: 8,
+        icon: '🔮',
+        name: 'The Spellbook',
+        topic: 'Prompt Engineering',
+        story: "A wizard's power lies in their words. Master the art of prompting!",
+        content: `
+          <h3>Prompt Engineering</h3>
+          <ul>
+            <li><strong>System prompt</strong> sets behavior/identity</li>
+            <li><strong>User prompt</strong> provides the actual task</li>
+            <li><strong>Chain of Thought</strong> = ask to show reasoning</li>
+            <li><strong>Few-shot</strong> = include examples in prompt</li>
+          </ul>
+        `,
+        questions: [
+          {
+            q: "What's the difference between system and user prompts?",
+            options: [
+              { a: 'A', text: "They're the same" },
+              { a: 'B', text: 'System sets behavior, user provides the task', correct: true },
+              { a: 'C', text: 'User is more important' },
+              { a: 'D', text: 'System is hidden from users' }
+            ],
+            explanation: 'System prompt defines WHO the AI is and how it should behave. User prompt is WHAT you\'re asking it to do.'
+          },
+          {
+            q: 'What is "chain of thought" prompting?',
+            options: [
+              { a: 'A', text: 'Writing very long prompts' },
+              { a: 'B', text: 'Asking the model to show its reasoning', correct: true },
+              { a: 'C', text: 'A specific prompting library' },
+              { a: 'D', text: 'A type of token' }
+            ],
+            explanation: 'Chain of thought prompting asks the model to "think step by step" - often improving reasoning on complex tasks.'
+          },
+          {
+            q: 'What are "few-shot" examples?',
+            options: [
+              { a: 'A', text: 'Using the model only a few times' },
+              { a: 'B', text: 'Including examples in the prompt', correct: true },
+              { a: 'C', text: 'A low-cost tier' },
+              { a: 'D', text: 'Training with few data points' }
+            ],
+            explanation: 'Few-shot learning provides examples in the prompt to guide the model toward the desired output format or behavior.'
+          }
+        ]
+      }
+    ];
+
+    // Game State
+    let currentLevel = 0;
+    let currentQuestion = 0;
+    let completedLevels = [];
+
+    // Load progress
+    function loadProgress() {
+      const saved = localStorage.getItem('llmQuestProgress');
+      if (saved) {
+        completedLevels = JSON.parse(saved);
+      }
+    }
+
+    // Save progress
+    function saveProgress() {
+      localStorage.setItem('llmQuestProgress', JSON.stringify(completedLevels));
+    }
+
+    // Show levels screen
+    function showLevels() {
+      document.getElementById('welcome').style.display = 'none';
+      document.getElementById('levels').style.display = 'block';
+      document.getElementById('game').style.display = 'none';
+      document.getElementById('victory').style.display = 'none';
+      
+      const grid = document.getElementById('levelGrid');
+      grid.innerHTML = '';
+      
+      levels.forEach((level, index) => {
+        const card = document.createElement('div');
+        card.className = 'level-card';
+        if (completedLevels.includes(level.id)) {
+          card.classList.add('completed');
+        }
+        if (index > 0 && !completedLevels.includes(levels[index - 1].id)) {
+          card.classList.add('locked');
+        }
+        
+        card.innerHTML = `
+          <div class="level-icon">${level.icon}</div>
+          <div class="level-name">${level.name}</div>
+          <div class="level-topic">${level.topic}</div>
+        `;
+        
+        if (!card.classList.contains('locked')) {
+          card.onclick = () => startLevel(index);
+        }
+        
+        grid.appendChild(card);
+      });
+    }
+
+    // Start a level
+    function startLevel(index) {
+      currentLevel = index;
+      currentQuestion = 0;
+      
+      const level = levels[index];
+      document.getElementById('welcome').style.display = 'none';
+      document.getElementById('levels').style.display = 'none';
+      document.getElementById('game').style.display = 'block';
+      document.getElementById('victory').style.display = 'none';
+      
+      // Update progress
+      const progress = ((index) / levels.length) * 100;
+      document.getElementById('progressFill').style.width = progress + '%';
+      
+      // Level info
+      document.getElementById('levelBadge').textContent = level.icon;
+      document.getElementById('levelTitle').textContent = level.name;
+      document.getElementById('levelTopic').textContent = level.topic;
+      document.getElementById('storyBox').textContent = level.story;
+      document.getElementById('contentBox').innerHTML = level.content;
+      
+      showQuestion();
+    }
+
+    // Show current question
+    function showQuestion() {
+      const level = levels[currentLevel];
+      const question = level.questions[currentQuestion];
+      
+      document.getElementById('quizProgress').textContent = `Question ${currentQuestion + 1}/3`;
+      
+      const quizContent = document.getElementById('quizContent');
+      quizContent.innerHTML = `
+        <div class="question">${question.q}</div>
+        <div class="options">
+          ${question.options.map((opt, i) => `
+            <div class="option" data-correct="${opt.correct}" data-index="${i}">
+              <span class="option-letter">${opt.a})</span>${opt.text}
+            </div>
+          `).join('')}
+        </div>
+        <div class="explanation" id="explanation">
+          <strong>💡 ${question.explanation}</strong>
+          <button class="btn btn-retry" id="retryBtn" onclick="nextQuestion()" style="display:none">Continue</button>
+        </div>
+      `;
+      
+      // Add click handlers
+      quizContent.querySelectorAll('.option').forEach(opt => {
+        opt.onclick = () => selectOption(opt, question);
+      });
+    }
+
+    // Handle option selection
+    function selectOption(optionEl, question) {
+      const correct = optionEl.dataset.correct === 'true';
+      const options = document.querySelectorAll('.option');
+      
+      // Disable all options
+      options.forEach(opt => opt.style.pointerEvents = 'none');
+      
+      if (correct) {
+        optionEl.classList.add('correct');
+        showConfetti();
+      } else {
+        optionEl.classList.add('wrong');
+        // Show correct answer
+        options.forEach(opt => {
+          if (opt.dataset.correct === 'true') {
+            opt.classList.add('correct');
+          }
+        });
+      }
+      
+      // Show explanation
+      const explanation = document.getElementById('explanation');
+      explanation.classList.add('show');
+      
+      const retryBtn = document.getElementById('retryBtn');
+      if (!correct) {
+        retryBtn.textContent = 'Try Again';
+        retryBtn.style.display = 'inline-block';
+      } else if (currentQuestion < 2) {
+        retryBtn.textContent = 'Next Question';
+        retryBtn.style.display = 'inline-block';
+      } else {
+        // Level complete!
+        retryBtn.textContent = 'Continue';
+        retryBtn.style.display = 'inline-block';
+      }
+    }
+
+    // Move to next question or complete level
+    function nextQuestion() {
+      const options = document.querySelectorAll('.option');
+      const wasCorrect = Array.from(options).some(opt => opt.classList.contains('correct'));
+      
+      if (!wasCorrect) {
+        // Reset for retry
+        currentQuestion = 0;
+      } else if (currentQuestion < 2) {
+        currentQuestion++;
+      } else {
+        // Level complete!
+        if (!completedLevels.includes(levels[currentLevel].id)) {
+          completedLevels.push(levels[currentLevel].id);
+          saveProgress();
+        }
+        
+        if (currentLevel >= levels.length - 1) {
+          // All levels complete!
+          showVictory();
+          return;
+        }
+      }
+      
+      showQuestion();
+    }
+
+    // Show victory screen
+    function showVictory() {
+      document.getElementById('welcome').style.display = 'none';
+      document.getElementById('levels').style.display = 'none';
+      document.getElementById('game').style.display = 'none';
+      document.getElementById('victory').style.display = 'block';
+      showConfetti();
+    }
+
+    // Confetti animation
+    function showConfetti() {
+      const container = document.getElementById('confetti');
+      container.innerHTML = '';
+      
+      const colors = ['#9b4dca', '#00d4ff', '#ff6b35', '#00ff88', '#ffd700'];
+      
+      for (let i = 0; i < 50; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = Math.random() * 100 + '%';
+        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.animationDelay = Math.random() * 0.5 + 's';
+        piece.style.animationDuration = (2 + Math.random()) + 's';
+        container.appendChild(piece);
+      }
+      
+      setTimeout(() => {
+        container.innerHTML = '';
+      }, 3500);
+    }
+
+    // Initialize
+    loadProgress();
+  </script>
+</body>
+</html>
