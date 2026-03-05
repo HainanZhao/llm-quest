@@ -563,6 +563,11 @@
         story: 'Every wizard needs to understand their power source. Learn what makes Large Language Models tick!',
         content: `
           <h3>What is an LLM?</h3>
+          <p>Large Language Models (LLMs) are AI systems trained on massive amounts of text data. They learn statistical patterns from billions of sentences, enabling them to understand language, answer questions, write code, and much more.</p>
+          <p>The key insight behind LLMs is <strong>next-token prediction</strong>. During training, the model sees a sequence of text and learns to predict what comes next. By doing this trillions of times, the model learns grammar, facts, reasoning patterns, and even some world knowledge - all without explicit programming.</p>
+          <p>It's crucial to understand: LLMs don't "know" facts in the way humans do. They predict what tokens are most likely to appear next based on patterns in their training data. This is why they can sometimes hallucinate - they're pattern-matchers, not knowledge repositories.</p>
+          <p>The two main phases are <strong>training</strong> (learning from data - expensive, one-time) and <strong>inference</strong> (generating responses - what happens when you use the model).</p>
+          <h4>Key Points</h4>
           <ul>
             <li><strong>LLM</strong> = Large Language Model - a neural network trained on massive text data</li>
             <li>LLMs learn to predict the <strong>next word</strong> given previous words</li>
@@ -611,6 +616,11 @@
         story: 'The Scroll has limits - your AI can only read so much at once!',
         content: `
           <h3>Understanding Context Window</h3>
+          <p>When you interact with an LLM, it doesn't have a persistent memory of previous conversations by default. Instead, it processes everything you send in a single "context window" - the maximum amount of text it can see at once. Think of it like the AI's working memory.</p>
+          <p>Every model has a limit on how many tokens (words/characters) can fit in this window. Early models had 2K-4K tokens. Modern models offer 32K, 128K, or even 1M tokens. But here's the catch: when you exceed this limit, something important happens.</p>
+          <p>Most models use a "sliding window" or simply truncate the oldest content. This means if you're having a long conversation, the AI will gradually "forget" the early parts. This has huge implications for building chat applications, document analysis, and any multi-turn interaction.</p>
+          <p>Additionally, longer contexts are computationally expensive - the attention mechanism scales quadratically (O(n²)), so doubling the context doesn't just double the cost, it quadruples it!</p>
+          <h4>Key Points</h4>
           <ul>
             <li><strong>Context window</strong> = maximum text an LLM can see at once</li>
             <li>Typical sizes: 4K, 8K, 32K, 128K, 1M tokens</li>
@@ -659,11 +669,16 @@
         story: 'Gems are precious - each token costs! Learn to use them wisely.',
         content: `
           <h3>Understanding Tokens</h3>
+          <p>Tokens are the fundamental unit of computation in LLMs. When you send text to an LLM, it gets broken down into tokens - not quite characters, not quite words, but somewhere in between.</p>
+          <p>A good rule of thumb: <strong>1 token equals about 4 characters or 0.75 words</strong>. So a paragraph of 100 words becomes roughly 133 tokens. This matters because LLM APIs charge per token - both for input and output.</p>
+          <p>Here is the critical insight: <strong>output tokens cost more than input tokens</strong>. Why? Because output is generated autoregressively - each token requires a full forward pass through the model.</p>
+          <p>This has major implications for cost optimization. In a 10-message conversation where each message is 1K tokens, by message 10 you are sending approximately 10K tokens every single API call.</p>
+          <h4>Key Points</h4>
           <ul>
-            <li><strong>Token</strong> ≈ 4 characters or 0.75 words</li>
-            <li>Pricing is per 1M tokens (input & output often different)</li>
+            <li><strong>Token</strong> is about 4 characters or 0.75 words</li>
+            <li>Pricing is per 1M tokens, input and output often differ</li>
             <li>Rate limits restrict requests per minute</li>
-            <li>Optimizing prompts = saving money!</li>
+            <li>Optimizing prompts equals saving money</li>
           </ul>
         `,
         questions: [
@@ -707,11 +722,16 @@
         story: 'The Transformer is the ancient spell that changed everything. Master its secrets!',
         content: `
           <h3>Transformer Architecture</h3>
+          <p>The Transformer is the architecture behind all modern LLMs. Introduced in 2017 (the famous "Attention Is All You Need" paper), it revolutionized natural language processing.</p>
+          <p>At its core is the <strong>attention mechanism</strong>. Unlike previous approaches (RNNs, LSTMs) that processed words sequentially, attention allows the model to look at all words in a sequence simultaneously and determine which ones are most relevant to each other.</p>
+          <p>Think of it like reading a sentence - when you encounter the word "bank", your brain automatically considers whether it refers to a river bank or a financial institution based on context. Attention does exactly this mathematically: it computes "attention scores" between every pair of words.</p>
+          <p>The key innovations are: self-attention (words relate to ALL other words), parallel processing (massive speedup over sequential models), and the feed-forward networks that transform the attended information.</p>
+          <h4>Key Points</h4>
           <ul>
             <li><strong>Attention mechanism</strong> identifies important relationships between words</li>
             <li>Self-attention: words relate to ALL other words in the sequence</li>
-            <li>Parallel processing = much faster than older RNN/LSTM approaches</li>
-            <li>Foundation of modern LLMs (GPT, Claude, Gemini, etc.)</li>
+            <li>Parallel processing equals much faster than older RNN/LSTM approaches</li>
+            <li>Foundation of modern LLMs like GPT, Claude, Gemini</li>
           </ul>
         `,
         questions: [
@@ -755,10 +775,15 @@
         story: 'Everything exists as a point in the magical embedding space!',
         content: `
           <h3>Understanding Embeddings</h3>
+          <p>At their core, LLMs work with numbers, not words. Embeddings are how we convert text into numerical representations that capture meaning.</p>
+          <p>An embedding is simply a list of numbers (a vector) that represents a piece of text. These vectors typically have hundreds or thousands of dimensions. What makes them powerful is how they capture meaning: words with similar meanings end up close to each other in this numerical space.</p>
+          <p>For example, the vectors for "king" and "queen" point in similar directions, as do "Paris" and "France". This property enables <strong>semantic search</strong> - finding related content without exact keyword matches.</p>
+          <p>This is the foundation of RAG (Retrieval Augmented Generation). Instead of stuffing all relevant information into the prompt, you store embeddings of your documents, search for the most similar ones to the user's query, and then feed those to the LLM.</p>
+          <h4>Key Points</h4>
           <ul>
-            <li>Words converted to <strong>number vectors</strong> (e.g., 768 dimensions)</li>
-            <li>Similar meanings = similar directions in space</li>
-            <li>Enables <strong>semantic search</strong> (find "king" by asking for "royalty")</li>
+            <li>Words are converted to <strong>number vectors</strong> (for example, 768 dimensions)</li>
+            <li>Similar meanings equal similar directions in space</li>
+            <li>Enables <strong>semantic search</strong> - finding related content without exact matches</li>
             <li>Foundations of RAG and similarity systems</li>
           </ul>
         `,
@@ -803,8 +828,13 @@
         story: 'MCP is the Universal Translator between your AI and the world!',
         content: `
           <h3>Model Context Protocol (MCP)</h3>
+          <p>LLMs are powerful but limited to their training data. MCP (Model Context Protocol) solves this by enabling LLMs to interact with the real world through tools and APIs.</p>
+          <p>Without tools, LLMs are essentially sophisticated autocomplete - impressive but not actionable. With MCP, you can give LLMs the ability to search the web, execute code, query databases, send emails, and more.</p>
+          <p>The protocol works by providing JSON schemas that describe each tool: what it does, what parameters it accepts, and what it returns. The LLM can then decide when to call tools and construct the proper arguments.</p>
+          <p>This is the key to building <strong>agentic AI</strong> - systems that can take autonomous action, not just generate text. The AI can break down complex tasks, call appropriate tools, and chain results together.</p>
+          <h4>Key Points</h4>
           <ul>
-            <li><strong>MCP</strong> = Model Context Protocol</li>
+            <li><strong>MCP</strong> equals Model Context Protocol</li>
             <li>Enables LLMs to call external tools and APIs</li>
             <li>Standardized way to extend AI capabilities</li>
             <li>Skills define what tools the AI can use</li>
@@ -851,9 +881,14 @@
         story: 'A true wizard commands an army of assistants!',
         content: `
           <h3>Skills and Subagents</h3>
+          <p>Single LLMs are impressive, but complex tasks often require multiple specialized capabilities. This is where skills and subagents come in.</p>
+          <p>A <strong>skill</strong> is a reusable capability definition - it packages together the instructions, tools, and context needed for the AI to perform a specific type of task. Think of it like a plugin system.</p>
+          <p><strong>Subagents</strong> take this further by delegating entire tasks to specialized, smaller AI agents. Instead of one monolithic AI trying to do everything, you have a coordinator that breaks down complex goals and delegates to experts.</p>
+          <p>This enables true parallelism. If you need to analyze 50 files, you can spawn 10 subagents processing 5 files each simultaneously. This is dramatically faster than sequential processing and allows each subagent to be optimized for its specific task.</p>
+          <h4>Key Points</h4>
           <ul>
-            <li><strong>Skills</strong> = reusable capability definitions</li>
-            <li><strong>Subagents</strong> = delegate to specialized, smaller agents</li>
+            <li><strong>Skills</strong> are reusable capability definitions</li>
+            <li><strong>Subagents</strong> delegate to specialized, smaller agents</li>
             <li>Enable parallel processing and specialized expertise</li>
             <li>Key to building powerful agentic AI systems</li>
           </ul>
@@ -899,11 +934,16 @@
         story: "A wizard's power lies in their words. Master the art of prompting!",
         content: `
           <h3>Prompt Engineering</h3>
+          <p>Prompt engineering is the art of communicating effectively with LLMs. Since LLMs respond to how you phrase requests, small changes in wording can dramatically affect outputs.</p>
+          <p>The <strong>system prompt</strong> sets the AI's overall behavior, personality, and rules. This is where you define who the AI is and how it should approach tasks. The <strong>user prompt</strong> is the immediate task or question.</p>
+          <p><strong>Chain of Thought (CoT)</strong> prompting asks the model to show its reasoning step by step. This dramatically improves performance on complex reasoning tasks. A simple addition like "think step by step" or "take a deep breath and work through this carefully" triggers more thorough internal reasoning.</p>
+          <p><strong>Few-shot learning</strong> provides examples in the prompt to guide the model toward desired output formats or behaviors. Instead of explaining what you want, you show 2-4 examples of inputs and outputs.</p>
+          <h4>Key Points</h4>
           <ul>
-            <li><strong>System prompt</strong> sets behavior/identity</li>
+            <li><strong>System prompt</strong> sets behavior and identity</li>
             <li><strong>User prompt</strong> provides the actual task</li>
-            <li><strong>Chain of Thought</strong> = ask to show reasoning</li>
-            <li><strong>Few-shot</strong> = include examples in prompt</li>
+            <li><strong>Chain of Thought</strong> asks to show reasoning</li>
+            <li><strong>Few-shot</strong> includes examples in prompt</li>
           </ul>
         `,
         questions: [
