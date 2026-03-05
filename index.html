@@ -382,15 +382,29 @@
       padding: 40px 20px;
     }
 
+    #victory.show {
+      animation: victoryFadeIn 1s ease;
+    }
+
+    @keyframes victoryFadeIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
     .victory-icon {
       font-size: 80px;
       margin-bottom: 20px;
-      animation: bounce 1s ease infinite;
+      animation: bounce 1s ease infinite, victoryGlow 2s ease-in-out infinite;
     }
 
     @keyframes bounce {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.1); }
+    }
+
+    @keyframes victoryGlow {
+      0%, 100% { filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.5)); }
+      50% { filter: drop-shadow(0 0 40px rgba(255, 215, 0, 0.8)); }
     }
 
     .victory-title {
@@ -401,6 +415,12 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
       margin-bottom: 20px;
+      animation: victoryPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes victoryPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
     }
 
     .victory-text {
@@ -1131,19 +1151,45 @@
     function showVictory() {
       document.getElementById('welcome').style.display = 'none';
       document.getElementById('levels').style.display = 'none';
+      document.getElementById('intro').style.display = 'none';
       document.getElementById('game').style.display = 'none';
       document.getElementById('victory').style.display = 'block';
-      showConfetti();
+      setTimeout(() => {
+        document.getElementById('victory').classList.add('show');
+      }, 10);
+      
+      // Play victory sound
+      playVictorySound();
+      
+      // More confetti for victory
+      showConfetti(150);
+      setTimeout(() => showConfetti(100), 500);
+      setTimeout(() => showConfetti(100), 1000);
+    }
+
+    // Victory fanfare sound
+    function playVictorySound() {
+      initAudio();
+      const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98];
+      notes.forEach((freq, i) => {
+        setTimeout(() => playTone(freq, 0.4, 'sine', 0.2), i * 150);
+      });
+      // Final chord
+      setTimeout(() => {
+        playTone(523.25, 0.8, 'sine', 0.15);
+        playTone(659.25, 0.8, 'sine', 0.15);
+        playTone(783.99, 0.8, 'sine', 0.15);
+      }, 900);
     }
 
     // Confetti animation
-    function showConfetti() {
+    function showConfetti(count = 50) {
       const container = document.getElementById('confetti');
       container.innerHTML = '';
       
       const colors = ['#9b4dca', '#00d4ff', '#ff6b35', '#00ff88', '#ffd700'];
       
-      for (let i = 0; i < 50; i++) {
+      for (let i = 0; i < count; i++) {
         const piece = document.createElement('div');
         piece.className = 'confetti-piece';
         piece.style.left = Math.random() * 100 + '%';
