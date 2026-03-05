@@ -24,6 +24,10 @@
       font-family: 'Quicksand', sans-serif;
       background: var(--bg-dark);
       color: var(--text-light);
+    }
+    
+    input::placeholder {
+      color: var(--text-muted);
       min-height: 100vh;
       background-image: 
         radial-gradient(ellipse at top, #2d1b4e 0%, transparent 50%),
@@ -492,8 +496,23 @@
 </head>
 <body>
   <div class="container">
+
+    <!-- Name Input Screen -->
+    <div id="name-input">
+      <div class="wizard-avatar">🧙</div>
+      <h1>LLM Quest</h1>
+      <p class="tagline">"Learn the magic of LLMs, one spell at a time!"</p>
+      
+      <div style="margin: 30px 0;">
+        <input type="text" id="playerName" placeholder="Enter your wizard name" 
+          style="padding: 15px 20px; font-size: 1.1rem; border-radius: 10px; border: 2px solid var(--accent-purple); background: var(--bg-card); color: white; width: 280px; text-align: center;" 
+          onkeypress="if(event.key==="Enter")startQuest()">
+      </div>
+      
+      <button class="btn btn-primary" onclick="startQuest()">Start Quest</button>
+    </div>
     <!-- Welcome Screen -->
-    <div id="welcome">
+    <div id="welcome" style="display:none">
       <div class="wizard-avatar">🧙</div>
       <h1>LLM Quest</h1>
       <p class="tagline">"Learn the magic of LLMs, one spell at a time!"</p>
@@ -1354,6 +1373,26 @@
       playTone(800, 0.05, 'square', 0.08);
     }
 
+    // Start quest with name
+    function startQuest() {
+      const nameInput = document.getElementById("playerName");
+      const name = nameInput.value.trim();
+      
+      if (!name) {
+        nameInput.style.borderColor = "#ff4757";
+        nameInput.placeholder = "Please enter your name!";
+        return;
+      }
+      
+      localStorage.setItem("llmQuestPlayerName", name);
+      
+      document.getElementById("name-input").style.display = "none";
+      document.getElementById("welcome").style.display = "block";
+      
+      // Update welcome message with name
+      document.querySelector(".tagline").textContent = `"Welcome, ${name}! Learn the magic of LLMs!"`;
+    }
+    
     // Initialize
     loadProgress();
   </script>
