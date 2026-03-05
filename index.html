@@ -521,34 +521,34 @@
         `,
         questions: [
           {
-            q: 'What does LLM stand for?',
+            q: 'What is the primary mechanism LLMs use for next-token prediction?',
             options: [
-              { a: 'A', text: 'Large Language Model', correct: true },
-              { a: 'B', text: 'Long Learning Machine' },
-              { a: 'C', text: 'Local Language Memory' },
-              { a: 'D', text: 'Linear Logic Matrix' }
+              { a: 'A', text: 'Retrieval from a knowledge base' },
+              { a: 'B', text: 'Sampling from a learned probability distribution', correct: true },
+              { a: 'C', text: 'Rule-based template filling' },
+              { a: 'D', text: 'Executing predefined scripts' }
             ],
-            explanation: 'LLM stands for Large Language Model - a type of AI trained on vast amounts of text data.'
+            explanation: 'LLMs output probability distributions over tokens and sample from them - enabling diverse, creative outputs.'
           },
           {
-            q: 'How do LLMs typically generate text?',
+            q: 'During inference, what happens when you set temperature to 0?',
             options: [
-              { a: 'A', text: 'By copying from training data' },
-              { a: 'B', text: 'By predicting the next most likely word', correct: true },
-              { a: 'C', text: 'By using hard-coded responses' },
-              { a: 'D', text: 'By connecting to a search engine' }
+              { a: 'A', text: 'The model becomes random' },
+              { a: 'B', text: 'It always picks the highest probability token (greedy decoding)', correct: true },
+              { a: 'C', text: 'It disables the attention mechanism' },
+              { a: 'D', text: 'It reduces memory usage' }
             ],
-            explanation: 'LLMs generate text by predicting the next most likely token (word) based on probability distributions learned during training.'
+            explanation: 'Temperature=0 forces greedy decoding - always selecting the token with highest probability, making output deterministic but potentially repetitive.'
           },
           {
-            q: 'What is the difference between training and inference?',
+            q: 'What is "few-shot" learning in the context of LLMs?',
             options: [
-              { a: 'A', text: 'They are the same thing' },
-              { a: 'B', text: 'Training = learning from data, inference = using the model', correct: true },
-              { a: 'C', text: 'Inference is more expensive' },
-              { a: 'D', text: 'Training requires more memory' }
+              { a: 'A', text: 'Training with minimal data' },
+              { a: 'B', text: 'Providing examples in the prompt to guide output format', correct: true },
+              { a: 'C', text: 'Using distilled smaller models' },
+              { a: 'D', text: 'Reducing model parameters' }
             ],
-            explanation: 'Training is when the model learns from data (lots of computation). Inference is when we use the trained model to generate responses.'
+            explanation: 'Few-shot learning in LLMs means showing a few input-output examples in the prompt to teach the model the desired pattern without fine-tuning.'
           }
         ]
       },
@@ -569,34 +569,34 @@
         `,
         questions: [
           {
-            q: 'What is a context window?',
+            q: 'What is the computational complexity of self-attention with respect to sequence length?',
             options: [
-              { a: 'A', text: 'The UI where you type messages' },
-              { a: 'B', text: 'The maximum amount of text an LLM can see at once', correct: true },
-              { a: 'C', text: 'The response length limit' },
-              { a: 'D', text: 'A scrolling text animation' }
+              { a: 'A', text: 'O(n)' },
+              { a: 'B', text: 'O(n log n)' },
+              { a: 'C', text: 'O(n²)', correct: true },
+              { a: 'D', text: 'O(1)' }
             ],
-            explanation: 'Context window is the maximum number of tokens (words/characters) the LLM can process in a single request.'
+            explanation: 'Self-attention computes pairwise interactions between all tokens, resulting in O(n²) complexity - the primary bottleneck for long contexts.'
           },
           {
-            q: 'What happens when you exceed the context limit?',
+            q: 'In a 128K context window, what happens to the earliest tokens during a long conversation?',
             options: [
-              { a: 'A', text: 'The model crashes' },
-              { a: 'B', text: 'It starts hallucinating more' },
-              { a: 'C', text: 'The oldest text gets truncated', correct: true },
-              { a: 'D', text: 'It automatically upgrades' }
+              { a: 'A', text: 'They are stored in infinite memory' },
+              { b: 'B', text: 'They get compressed into embeddings' },
+              { c: 'C', text: 'They are evicted/rotated out', correct: true },
+              { d: 'D', text: 'They get higher attention weight' }
             ],
-            explanation: 'When context is exceeded, the oldest parts of the conversation are typically dropped to fit new content.'
+            explanation: 'Most models use sliding windows or ring buffers - earliest tokens are dropped when context fills, unless explicitly stored in external memory.'
           },
           {
-            q: 'Why might a shorter context be better?',
+            q: 'What technique allows LLMs to effectively handle contexts larger than their native window?',
             options: [
-              { a: 'A', text: "It's not - always better to have more" },
-              { a: 'B', text: 'Faster and cheaper', correct: true },
-              { a: 'C', text: 'It improves accuracy' },
-              { a: 'D', text: 'It reduces hallucinations' }
+              { a: 'A', text: 'Truncated backpropagation through time' },
+              { a: 'B', text: 'Recursive chunking with summary caching', correct: true },
+              { a: 'C', text: 'Gradient checkpointing' },
+              { a: 'D', text: 'Knowledge distillation' }
             ],
-            explanation: 'Shorter context means faster processing and lower costs - important for high-volume applications.'
+            explanation: 'Techniques like LangChain\'s memory or Calude\'s "compact" mode chunk long contexts and maintain running summaries to extend effective memory.'
           }
         ]
       },
@@ -617,34 +617,34 @@
         `,
         questions: [
           {
-            q: 'What is a "token" in LLM terms?',
+            q: 'Why is tokenization at the subword level (BPE/WordPiece) preferred over character-level?',
             options: [
-              { a: 'A', text: 'A special authentication key' },
-              { a: 'B', text: 'A chunk of text (roughly 4 characters)', correct: true },
-              { a: 'C', text: 'A complete sentence' },
-              { a: 'D', text: 'An API key' }
+              { a: 'A', text: 'It reduces the vocabulary size' },
+              { a: 'B', text: 'It balances vocabulary size with reasonable sequence length', correct: true },
+              { a: 'C', text: 'It eliminates the need for embeddings' },
+              { a: 'D', text: 'It enables faster GPU computation' }
             ],
-            explanation: 'A token is roughly 4 characters or 0.75 of a word - it\'s the basic unit the LLM processes.'
+            explanation: 'Subword tokenization creates a balanced vocabulary - large enough to capture words, small enough to keep sequence lengths manageable.'
           },
           {
-            q: 'How are tokens usually counted?',
+            q: 'For a model priced at $3/M input tokens and $15/M output tokens, what is the cost ratio?',
             options: [
-              { a: 'A', text: 'By words (1 word = 1 token)' },
-              { a: 'B', text: 'Roughly 0.75 words per token', correct: true },
-              { a: 'C', text: 'By characters' },
-              { a: 'D', text: 'By sentences' }
+              { a: 'A', text: '1:5' },
+              { a: 'B', text: '1:1' },
+              { a: 'C', text: '5:1', correct: true },
+              { a: 'D', text: '15:3' }
             ],
-            explanation: 'Tokenizers typically convert about 0.75 words into 1 token, though it varies by language and model.'
+            explanation: 'Output tokens are 5x more expensive ($15/$3 = 5) because generation requires full forward passes for each token produced.'
           },
           {
-            q: 'Why do longer prompts cost more?',
+            q: 'What causes the "context is wasted" problem in LLM APIs?',
             options: [
-              { a: 'A', text: "They don't" },
-              { a: 'B', text: 'Because the model processes more tokens', correct: true },
-              { a: 'C', text: 'Only responses cost money' },
-              { a: 'D', text: "It's a fixed price" }
+              { a: 'A', text: 'Network latency' },
+              { a: 'B', text: 'Sending the full conversation history on every API call', correct: true },
+              { a: 'C', text: 'Tokenization overhead' },
+              { a: 'D', text: 'Model quantization' }
             ],
-            explanation: 'Both input and output tokens count toward cost - more text = more tokens = more money.'
+            explanation: 'Each API call includes the entire conversation history - after 10 messages with 1K tokens each, you pay for 10K tokens even if the new input is just 100 tokens.'
           }
         ]
       },
@@ -665,34 +665,34 @@
         `,
         questions: [
           {
-            q: 'What is the attention mechanism?',
+            q: 'In self-attention, what does the Q, K, V abbreviation stand for?',
             options: [
-              { a: 'A', text: "How the AI pays attention to user instructions" },
-              { a: 'B', text: 'A way to identify important words in context', correct: true },
-              { a: 'C', text: 'The focus mode in training' },
-              { a: 'D', text: 'A type of neural network layer' }
+              { a: 'A', text: 'Query, Kernel, Value' },
+              { a: 'B', text: 'Query, Key, Value', correct: true },
+              { a: 'C', text: 'Quality, Knowledge, Vector' },
+              { a: 'D', text: 'Quick, Known, Variable' }
             ],
-            explanation: 'Attention allows the model to weigh the importance of different parts of the input when generating output.'
+            explanation: 'Q (Query) represents what we\'re looking for, K (Key) represents what each token offers to match, and V (Value) is the actual information transferred.'
           },
           {
-            q: 'What can attention "attend" to?',
+            q: 'What is the primary advantage of causal (unidirectional) attention over bidirectional?',
             options: [
-              { a: 'A', text: 'Only the previous word' },
-              { a: 'B', text: 'Any position in the input sequence', correct: true },
-              { a: 'C', text: 'Only user messages' },
-              { a: 'D', text: 'External databases' }
+              { a: 'A', text: 'Faster computation due to parallelization' },
+              { a: 'B', text: 'Enables autoregressive generation without data leakage', correct: true },
+              { a: 'C', text: 'Lower memory usage' },
+              { a: 'D', text: 'Better compression' }
             ],
-            explanation: 'Self-attention allows each word to look at every other word in the sequence to understand relationships.'
+            explanation: 'Causal attention ensures each token can only attend to previous tokens - essential for next-token prediction without the model "seeing" the answer.'
           },
           {
-            q: 'Why are transformers efficient?',
+            q: 'Why do modern LLMs use Grouped-Query Attention (GQA)?',
             options: [
-              { a: 'A', text: 'They use less memory than older models' },
-              { a: 'B', text: 'They can process all words in parallel', correct: true },
-              { a: 'C', text: "They don't need GPUs" },
-              { a: 'D', text: "They're smaller than RNNs" }
+              { a: 'A', text: 'To improve output creativity' },
+              { a: 'B', text: 'To reduce KV cache memory while maintaining quality', correct: true },
+              { a: 'C', text: 'To enable longer contexts' },
+              { a: 'D', text: 'To speed up training' }
             ],
-            explanation: 'Unlike sequential models (RNNs), transformers process all tokens simultaneously - enabling massive parallelism.'
+            explanation: 'GQA shares K and V projections across multiple query heads - reduces memory footprint significantly with minimal quality loss (used in LLaMA 2 70B).'
           }
         ]
       },
@@ -713,34 +713,34 @@
         `,
         questions: [
           {
-            q: 'What is an embedding?',
+            q: 'What mathematical operation is commonly used to find similar items in embedding space?',
             options: [
-              { a: 'A', text: 'A type of API call' },
-              { a: 'B', text: 'A list of numbers representing meaning', correct: true },
-              { a: 'C', text: 'A memory compression technique' },
-              { a: 'D', text: 'A text format' }
+              { a: 'A', text: 'Addition' },
+              { a: 'B', text: 'Cosine similarity', correct: true },
+              { a: 'C', text: 'Modulus calculation' },
+              { a: 'D', text: 'Division' }
             ],
-            explanation: 'An embedding is a numerical representation of text as a vector of numbers that captures semantic meaning.'
+            explanation: 'Cosine similarity measures angle between vectors - direction matters more than magnitude, making it ideal for semantic similarity.'
           },
           {
-            q: 'Why do embeddings enable semantic search?',
+            q: 'What is "embedding degeneration" and why is it problematic?',
             options: [
-              { a: 'A', text: "They're faster than text" },
-              { a: 'B', text: 'Similar meanings have similar vectors', correct: true },
-              { a: 'C', text: 'They compress data' },
-              { a: 'D', text: "They're encrypted" }
+              { a: 'A', text: 'Embeddings becoming too large' },
+              { a: 'B', text: 'Embeddings collapsing into a small subspace, losing discriminative power', correct: true },
+              { a: 'C', text: 'Embeddings containing only zeros' },
+              { a: 'D', text: 'Embeddings exceeding token limits' }
             ],
-            explanation: 'Because similar concepts have vectors pointing in similar directions, we can find related items by measuring vector distance.'
+            explanation: 'Embedding degeneration occurs when vectors cluster together - the model loses ability to distinguish between different concepts.'
           },
           {
-            q: "What's the typical dimensionality of embeddings?",
+            q: 'In RAG systems, why are embeddings typically generated separately from the generation model?',
             options: [
-              { a: 'A', text: '1-10' },
-              { a: 'B', text: '100' },
-              { a: 'C', text: '384-4096', correct: true },
-              { a: 'D', text: '1M+' }
+              { a: 'A', text: 'It\'s required by law' },
+              { a: 'B', text: 'Embedding models are optimized for retrieval (contrastive learning), not generation', correct: true },
+              { a: 'C', text: 'To reduce API costs' },
+              { a: 'D', text: 'Embedding models are faster' }
             ],
-            explanation: 'Common embedding models output vectors with 384 to 4096 dimensions (e.g., ada-002 uses 1536).'
+            explanation: 'Retrieval embeddings use different training objectives (contrastive) than language models (next-token prediction) - they\'re specialized for recall.'
           }
         ]
       },
@@ -761,34 +761,34 @@
         `,
         questions: [
           {
-            q: 'What does MCP stand for?',
+            q: 'In MCP (Model Context Protocol), what defines the interface between the LLM and external tools?',
             options: [
-              { a: 'A', text: 'Multi-Component Processing' },
-              { a: 'B', text: 'Model Context Protocol', correct: true },
-              { a: 'C', text: 'Memory Cache Protocol' },
-              { a: 'D', text: 'Message Control Program' }
+              { a: 'A', text: 'REST API endpoints' },
+              { a: 'B', text: 'JSON schemas specifying tool names, descriptions, and parameter types', correct: true },
+              { a: 'C', text: 'WebSocket connections' },
+              { a: 'D', text: 'GraphQL queries' }
             ],
-            explanation: 'MCP = Model Context Protocol, a standard for enabling LLMs to interact with external tools and data sources.'
+            explanation: 'MCP uses JSON schemas to let LLMs understand what tools exist, what they do, and what inputs they need - enabling structured tool calling.'
           },
           {
-            q: 'What can MCP enable for an LLM?',
+            q: 'What is the main challenge when an LLM decides to call multiple tools in parallel?',
             options: [
-              { a: 'A', text: 'Only text generation' },
-              { a: 'B', text: 'Calling external tools and APIs', correct: true },
-              { a: 'C', text: 'Reducing costs' },
-              { a: 'D', text: 'Faster training' }
+              { a: 'A', text: 'Network bandwidth' },
+              { a: 'B', text: 'Handling interdependent results (tool B needs output from tool A)', correct: true },
+              { a: 'C', text: 'API rate limits' },
+              { a: 'D', text: 'Memory constraints' }
             ],
-            explanation: 'MCP allows LLMs to break out of their "black box" and interact with real-world systems, databases, and APIs.'
+            explanation: 'Parallel tool execution requires understanding dependencies - if tool results affect other tool inputs, you must sequence them correctly.'
           },
           {
-            q: 'Why is MCP standardization valuable?',
+            q: 'What is "tool schema explosion" and why does it matter?',
             options: [
-              { a: 'A', text: "It's not important" },
-              { a: 'B', text: 'It lets any AI use any tool consistently', correct: true },
-              { a: 'C', text: "It's required by law" },
-              { a: 'D', text: 'It reduces token usage' }
+              { a: 'A', text: 'Too many tools in the system' },
+              { a: 'B', text: 'When the tool list exceeds context limits, degrading model performance', correct: true },
+              { a: 'C', text: 'Tools creating more tools recursively' },
+              { a: 'D', text: 'Duplicate tool definitions' }
             ],
-            explanation: 'Standardization means tools work the same way across different AI systems - no more custom integrations per model.'
+            explanation: 'With hundreds of tools, the schema overwhelms the prompt - causing the model to select wrong tools or miss relevant ones. Solutions: grouping, hierarchical menus.'
           }
         ]
       },
@@ -809,34 +809,34 @@
         `,
         questions: [
           {
-            q: 'What is a "skill" in agent frameworks?',
+            q: 'What is the primary benefit of using sub-agents over a single monolithic agent?',
             options: [
-              { a: 'A', text: 'A programming language' },
-              { a: 'B', text: 'A reusable capability definition', correct: true },
-              { a: 'C', text: 'A type of model' },
-              { a: 'D', text: 'An API endpoint' }
+              { a: 'A', text: 'Lower API costs' },
+              { a: 'B', text: 'Parallel execution and specialized expertise per subtask', correct: true },
+              { a: 'C', text: 'Simpler code maintenance' },
+              { a: 'D', text: 'Faster initial response time' }
             ],
-            explanation: 'A skill defines a capability - what the agent can do, how it works, and what tools it has access to.'
+            explanation: 'Sub-agents enable parallel processing of independent tasks and allow each to be optimized for its specific domain (code review, data analysis, etc.).'
           },
           {
-            q: 'What are subagents used for?',
+            q: 'In agent orchestration, what is the "hierarchical planning" pattern?',
             options: [
-              { a: 'A', text: 'Making the main agent faster' },
-              { a: 'B', text: 'Delegating to specialized, smaller agents', correct: true },
-              { a: 'C', text: 'Storing conversation history' },
-              { a: 'D', text: 'Reducing costs' }
+              { a: 'A', text: 'All agents have equal priority' },
+              { a: 'B', text: 'A master agent breaks down tasks and delegates to specialized sub-agents', correct: true },
+              { a: 'C', text: 'Agents execute in random order' },
+              { a: 'D', text: 'Each agent works independently' }
             ],
-            explanation: 'Subagents let you break complex tasks into smaller pieces handled by specialized agents.'
+            explanation: 'Hierarchical planning has a coordinator that decomposes complex goals into subtasks assigned to specialized sub-agents.'
           },
           {
-            q: "What's the benefit of agent delegation?",
+            q: 'What is the main risk of "agentic loops" - where an agent keeps calling tools repeatedly?',
             options: [
-              { a: 'A', text: "It's more accurate" },
-              { a: 'B', text: 'Parallel processing and specialized expertise', correct: true },
-              { a: 'C', text: 'It costs less' },
-              { a: 'D', text: 'It requires no setup' }
+              { a: 'A', text: 'Improved accuracy' },
+              { a: 'B', text: 'Infinite loops consuming resources without making progress', correct: true },
+              { a: 'C', text: 'Better context management' },
+              { a: 'D', text: 'Reduced latency' }
             ],
-            explanation: 'Delegation enables parallel execution and lets each subagent focus on its specialty for better results.'
+            explanation: 'Agents can get stuck calling the same tools endlessly (e.g., retrying a failed search). Guardrails, max iterations, and progress checks are essential.'
           }
         ]
       },
@@ -857,34 +857,34 @@
         `,
         questions: [
           {
-            q: "What's the difference between system and user prompts?",
+            q: 'What is "prompt injection" and why is it a security concern?',
             options: [
-              { a: 'A', text: "They're the same" },
-              { a: 'B', text: 'System sets behavior, user provides the task', correct: true },
-              { a: 'C', text: 'User is more important' },
-              { a: 'D', text: 'System is hidden from users' }
+              { a: 'A', text: 'A way to speed up prompts' },
+              { a: 'B', text: 'Malicious input that overrides system prompts to make the model behave unexpectedly', correct: true },
+              { a: 'C', text: 'A technique for longer contexts' },
+              { a: 'D', text: 'A prompt optimization method' }
             ],
-            explanation: 'System prompt defines WHO the AI is and how it should behave. User prompt is WHAT you\'re asking it to do.'
+            explanation: 'Prompt injection embeds hostile instructions in user input that can override system prompts - leading to data leaks, jailbreaks, or harmful outputs.'
           },
           {
-            q: 'What is "chain of thought" prompting?',
+            q: 'In chain-of-thought prompting, what happens if you add "Take a deep breath and work step by step"?',
             options: [
-              { a: 'A', text: 'Writing very long prompts' },
-              { a: 'B', text: 'Asking the model to show its reasoning', correct: true },
-              { a: 'C', text: 'A specific prompting library' },
-              { a: 'D', text: 'A type of token' }
+              { a: 'A', text: 'Nothing significant' },
+              { a: 'B', text: 'It often improves reasoning on complex tasks without explicit CoT examples', correct: true },
+              { a: 'C', text: 'It reduces token usage' },
+              { a: 'D', text: 'It enables tool use' }
             ],
-            explanation: 'Chain of thought prompting asks the model to "think step by step" - often improving reasoning on complex tasks.'
+            explanation: 'This is an implicit CoT technique - the model\'s internal reasoning improves when given permission to "slow down" even without explicit steps.'
           },
           {
-            q: 'What are "few-shot" examples?',
+            q: 'What is the difference between "system" and "user" prompts in API-based LLMs?',
             options: [
-              { a: 'A', text: 'Using the model only a few times' },
-              { a: 'B', text: 'Including examples in the prompt', correct: true },
-              { a: 'C', text: 'A low-cost tier' },
-              { a: 'D', text: 'Training with few data points' }
+              { a: 'A', text: 'They\'re processed identically' },
+              { a: 'B', text: 'System sets persistent behavior/identity; user is the current task', correct: true },
+              { a: 'C', text: 'User prompts cost more' },
+              { a: 'D', text: 'System prompts have higher priority' }
             ],
-            explanation: 'Few-shot learning provides examples in the prompt to guide the model toward the desired output format or behavior.'
+            explanation: 'System prompts define WHO the AI is and rules for all interactions. User prompts are per-request tasks that inherit those rules.'
           }
         ]
       }
@@ -1043,8 +1043,10 @@
       if (!wasCorrect) {
         // Reset for retry
         currentQuestion = 0;
+        showQuestion();
       } else if (currentQuestion < 2) {
         currentQuestion++;
+        showQuestion();
       } else {
         // Level complete!
         if (!completedLevels.includes(levels[currentLevel].id)) {
@@ -1055,11 +1057,13 @@
         if (currentLevel >= levels.length - 1) {
           // All levels complete!
           showVictory();
-          return;
+        } else {
+          // Go to next level
+          currentLevel++;
+          currentQuestion = 0;
+          startLevel(currentLevel);
         }
       }
-      
-      showQuestion();
     }
 
     // Show victory screen
