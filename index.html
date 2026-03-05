@@ -41,6 +41,13 @@
     #welcome {
       text-align: center;
       padding: 60px 20px;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    #welcome.hidden {
+      opacity: 0;
+      transform: scale(0.95);
+      pointer-events: none;
     }
 
     h1 {
@@ -911,7 +918,14 @@
 
     // Show levels screen
     function showLevels() {
-      document.getElementById('welcome').style.display = 'none';
+      const welcome = document.getElementById('welcome');
+      welcome.classList.add('hidden');
+      
+      setTimeout(() => {
+        welcome.style.display = 'none';
+        welcome.classList.remove('hidden');
+      }, 500);
+      
       document.getElementById('levels').style.display = 'block';
       document.getElementById('game').style.display = 'none';
       document.getElementById('victory').style.display = 'none';
