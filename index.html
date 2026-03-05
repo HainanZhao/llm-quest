@@ -41,6 +41,7 @@
     #welcome {
       text-align: center;
       padding: 60px 20px;
+      animation: fadeIn 0.6s ease;
       transition: opacity 0.5s ease, transform 0.5s ease;
     }
 
@@ -103,11 +104,24 @@
     /* Level Selection */
     #levels {
       display: none;
+      animation: fadeIn 0.4s ease;
     }
 
     /* Intro Screen */
     #intro {
       display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    /* Game Screen */
+    #game {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .levels-title {
@@ -802,14 +816,14 @@
             explanation: 'Cosine similarity measures the angle between two vectors (cosine of the angle). It\'s preferred over Euclidean distance because it focuses on direction/orientation rather than magnitude. "king" and "queen" have different magnitudes but similar directions - cosine catches this.'
           },
           {
-            q: 'What is "embedding degeneration" and why is it problematic?',
+            q: 'What is the key advantage of using embeddings for semantic search over keyword matching?',
             options: [
-              { a: 'A', text: 'Embeddings becoming too large' },
-              { a: 'B', text: 'Embeddings collapsing into a small subspace, losing discriminative power', correct: true },
-              { a: 'C', text: 'Embeddings containing only zeros' },
-              { a: 'D', text: 'Embeddings exceeding token limits' }
+              { a: 'A', text: 'Embeddings are faster to compute' },
+              { a: 'B', text: 'Embeddings capture meaning and context, finding related concepts without exact matches', correct: true },
+              { a: 'C', text: 'Embeddings require less storage' },
+              { a: 'D', text: 'Embeddings are always accurate' }
             ],
-            explanation: 'Embedding degeneration happens when during training, vectors collapse toward the origin or into a narrow cone. All inputs become nearly identical, making semantic search impossible. Normalization and regularized training help prevent this.'
+            explanation: 'Keyword search only finds exact matches. Semantic search with embeddings finds conceptually related content - searching for "royalty" will find "king" and "queen" even if those exact words never appear in the document.'
           },
           {
             q: 'In RAG systems, why are embeddings typically generated separately from the generation model?',
@@ -981,7 +995,57 @@
             explanation: 'System prompts are prepended to every conversation turn and establish identity, tone, and rules. They persist across the session. User prompts are the immediate task. Some models (like Claude) treat them differently in their attention patterns - system instructions get higher attention weight.'
           }
         ]
+      },
+      {
+        id: 9,
+        icon: "📈",
+        name: "The Scale",
+        topic: "Scaling Laws",
+        story: "The Scale reveals how more compute and data create mightier wizards!",
+        content: `
+          <h3>Understanding Scaling Laws</h3>
+          <ul>
+            <li><strong>Neural scaling laws</strong> predict performance improvements with more data, compute, and parameters</li>
+            <li><strong>More parameters</strong> = more capacity to learn patterns</li>
+            <li><strong>More training data</strong> = more knowledge</li>
+            <li><strong>More compute</strong> = longer training</li>
+            <li>Power law: performance improves predictably with scale</li>
+          </ul>
+        `,
+        questions: [
+          {
+            q: "What do scaling laws predict?",
+            options: [
+              { a: "A", text: "How model performance improves with more resources", correct: true },
+              { a: "B", text: "The maximum model size allowed" },
+              { a: "C", text: "How fast models generate text" },
+              { a: "D", text: "The optimal temperature setting" }
+            ],
+            explanation: "Scaling laws predict how model performance improves as you add more compute, data, or parameters."
+          },
+          {
+            q: "What happens when you increase model parameters?",
+            options: [
+              { a: "A", text: "It becomes slower but more accurate" },
+              { a: "B", text: "It has more capacity to learn patterns", correct: true },
+              { a: "C", text: "It uses less memory" },
+              { a: "D", text: "It requires less training data" }
+            ],
+            explanation: "More parameters = more learnable patterns, but also more compute needed."
+          },
+          {
+            q: "Which is NOT a factor in scaling laws?",
+            options: [
+              { a: "A", text: "Amount of training data" },
+              { a: "B", text: "Compute power" },
+              { a: "C", text: "The color of the model", correct: true },
+              { a: "D", text: "Number of parameters" }
+            ],
+            explanation: "Scaling laws involve data, compute, and parameters - not model color!"
+          }
+        ]
       }
+
     ];
 
     // Game State
