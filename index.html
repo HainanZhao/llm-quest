@@ -105,6 +105,11 @@
       display: none;
     }
 
+    /* Intro Screen */
+    #intro {
+      display: none;
+    }
+
     .levels-title {
       font-family: 'Press Start 2P', cursive;
       font-size: 1rem;
@@ -467,7 +472,29 @@
       <div class="level-grid" id="levelGrid"></div>
     </div>
 
-    <!-- Game Screen -->
+    <!-- Intro Screen (Story + Content before Quiz) -->
+    <div id="intro">
+      <div class="progress-bar">
+        <div class="progress-fill" id="introProgressFill"></div>
+      </div>
+      <div class="level-header">
+        <div class="level-badge" id="introLevelBadge">🌱</div>
+        <div class="level-info">
+          <h2 id="introLevelTitle">The Spark</h2>
+          <span class="topic" id="introLevelTopic">LLM Fundamentals</span>
+        </div>
+      </div>
+      <div class="story-box" id="introStoryBox"></div>
+      <div class="content-box" id="introContentBox"></div>
+      <div style="text-align: center; margin-top: 30px;">
+        <button class="btn btn-primary" id="startQuizBtn" onclick="playClickSound(); startQuiz()">Start Quiz</button>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn back-level-btn" onclick="playClickSound(); showLevels()">← Back to Levels</button>
+      </div>
+    </div>
+
+    <!-- Game Screen (Quiz only) -->
     <div id="game">
       <div class="progress-bar">
         <div class="progress-fill" id="progressFill"></div>
@@ -927,6 +954,7 @@
       }, 500);
       
       document.getElementById('levels').style.display = 'block';
+      document.getElementById('intro').style.display = 'none';
       document.getElementById('game').style.display = 'none';
       document.getElementById('victory').style.display = 'none';
       
@@ -957,7 +985,7 @@
       });
     }
 
-    // Start a level
+    // Start a level - show intro first
     function startLevel(index) {
       currentLevel = index;
       currentQuestion = 0;
@@ -966,20 +994,34 @@
       const level = levels[index];
       document.getElementById('welcome').style.display = 'none';
       document.getElementById('levels').style.display = 'none';
-      document.getElementById('game').style.display = 'block';
+      document.getElementById('intro').style.display = 'block';
+      document.getElementById('game').style.display = 'none';
       document.getElementById('victory').style.display = 'none';
       
       // Update progress
       const progress = ((index) / levels.length) * 100;
-      document.getElementById('progressFill').style.width = progress + '%';
+      document.getElementById('introProgressFill').style.width = progress + '%';
       
-      // Level info
+      // Level info for intro
+      document.getElementById('introLevelBadge').textContent = level.icon;
+      document.getElementById('introLevelTitle').textContent = level.name;
+      document.getElementById('introLevelTopic').textContent = level.topic;
+      document.getElementById('introStoryBox').textContent = level.story;
+      document.getElementById('introContentBox').innerHTML = level.content;
+      
+      // Also update game screen for when we navigate to it
       document.getElementById('levelBadge').textContent = level.icon;
       document.getElementById('levelTitle').textContent = level.name;
       document.getElementById('levelTopic').textContent = level.topic;
       document.getElementById('storyBox').textContent = level.story;
       document.getElementById('contentBox').innerHTML = level.content;
-      
+      document.getElementById('progressFill').style.width = progress + '%';
+    }
+
+    // Start quiz from intro
+    function startQuiz() {
+      document.getElementById('intro').style.display = 'none';
+      document.getElementById('game').style.display = 'block';
       showQuestion();
     }
 
