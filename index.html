@@ -842,6 +842,55 @@
       },
       {
         id: 8,
+      {
+        id: 9,
+        icon: "📈",
+        name: "The Compass",
+        topic: "Scaling Laws",
+        story: "The Compass reveals the secrets of AI power - how more compute and data create mightier wizards!",
+        content: `
+          <h3>Understanding Scaling Laws</h3>
+          <ul>
+            <li><strong>Neural scaling laws</strong> predict how model performance improves with more data, compute, and parameters</li>
+            <li><strong>More parameters</strong> = more capacity to learn patterns</li>
+            <li><strong>More training data</strong> = more knowledge to draw from</li>
+            <li><strong>More compute</strong> = longer training possible</li>
+            <li>Power law: performance improves predictably with scale</li>
+          </ul>
+        `,
+        questions: [
+          {
+            q: "What do scaling laws predict?",
+            options: [
+              { a: "A", text: "How model performance improves with more resources", correct: true },
+              { a: "B", text: "The maximum model size allowed" },
+              { a: "C", text: "How fast models generate text" },
+              { a: "D", text: "The optimal temperature setting" }
+            ],
+            explanation: "Scaling laws predict how model performance (like accuracy) improves as you add more compute, data, or parameters."
+          },
+          {
+            q: "What happens when you increase model parameters?",
+            options: [
+              { a: "A", text: "It becomes slower but more accurate" },
+              { a: "B", text: "It has more capacity to learn patterns", correct: true },
+              { a: "C", text: "It uses less memory" },
+              { a: "D", text: "It requires less training data" }
+            ],
+            explanation: "More parameters = more learnable patterns. But also more compute needed for training and inference."
+          },
+          {
+            q: "What is NOT a factor in scaling laws?",
+            options: [
+              { a: "A", text: "Amount of training data" },
+              { a: "B", text: "Compute power" },
+              { a: "C", text: "The color of the model", correct: true },
+              { a: "D", text: "Number of parameters" }
+            ],
+            explanation: "Scaling laws involve data, compute, and parameters - not superficial things like model color!"
+          }
+        ]
+      },
         icon: '🔮',
         name: 'The Spellbook',
         topic: 'Prompt Engineering',
