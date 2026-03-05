@@ -565,14 +565,17 @@
           <h3>What is an LLM?</h3>
           <p>Large Language Models (LLMs) are AI systems trained on massive amounts of text data. They learn statistical patterns from billions of sentences, enabling them to understand language, answer questions, write code, and much more.</p>
           <p>The key insight behind LLMs is <strong>next-token prediction</strong>. During training, the model sees a sequence of text and learns to predict what comes next. By doing this trillions of times, the model learns grammar, facts, reasoning patterns, and even some world knowledge - all without explicit programming.</p>
+          <p>When generating text, the model outputs a <strong>probability distribution</strong> over all possible next tokens. You can control how creative or deterministic the output is using <strong>temperature</strong>. A higher temperature (like 0.8) makes the model pick less likely tokens, resulting in more creative but unpredictable output. Setting temperature to 0 forces "greedy" decoding - always picking the most likely token, making output deterministic but potentially repetitive.</p>
+          <p><strong>Few-shot learning</strong> is a powerful prompting technique where you include 2-4 examples in the conversation to show the model the pattern you want. Instead of explaining the format, you demonstrate it with examples.</p>
           <p>It's crucial to understand: LLMs don't "know" facts in the way humans do. They predict what tokens are most likely to appear next based on patterns in their training data. This is why they can sometimes hallucinate - they're pattern-matchers, not knowledge repositories.</p>
           <p>The two main phases are <strong>training</strong> (learning from data - expensive, one-time) and <strong>inference</strong> (generating responses - what happens when you use the model).</p>
           <h4>Key Points</h4>
           <ul>
-            <li><strong>LLM</strong> = Large Language Model - a neural network trained on massive text data</li>
-            <li>LLMs learn to predict the <strong>next word</strong> given previous words</li>
-            <li>Training = learning patterns from data; Inference = using the model to generate</li>
-            <li>They don't "know" facts - they predict likely next tokens based on patterns</li>
+            <li><strong>LLM</strong> equals Large Language Model</li>
+            <li>LLMs predict the <strong>next word</strong> using probability distributions</li>
+            <li><strong>Temperature</strong> controls creativity: 0 is deterministic, higher is more random</li>
+            <li><strong>Few-shot</strong> shows examples in prompt to guide output</li>
+            <li>Training equals learning patterns; Inference equals generating</li>
           </ul>
         `,
         questions: [
