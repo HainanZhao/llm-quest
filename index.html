@@ -652,16 +652,16 @@
         story: 'The Scroll has limits - your AI can only read so much at once!',
         content: `
           <h3>Understanding Context Window</h3>
-          <p>When you interact with an LLM, it doesn't have a persistent memory of previous conversations by default. Instead, it processes everything you send in a single "context window" - the maximum amount of text it can see at once. Think of it like the AI's working memory.</p>
-          <p>Every model has a limit on how many tokens (words/characters) can fit in this window. Early models had 2K-4K tokens. Modern models offer 32K, 128K, or even 1M tokens. But here's the catch: when you exceed this limit, something important happens.</p>
-          <p>Most models use a "sliding window" or simply truncate the oldest content. This means if you're having a long conversation, the AI will gradually "forget" the early parts. This has huge implications for building chat applications, document analysis, and any multi-turn interaction.</p>
-          <p>Additionally, longer contexts are computationally expensive - the attention mechanism scales quadratically (O(n²)), so doubling the context doesn't just double the cost, it quadruples it!</p>
+          <p>When you interact with an LLM, it doesn't have a persistent memory - it processes everything in a "context window" - the maximum text it can see at once.</p>
+          <p>Today's models have much larger windows: 32K (Claude 3.5), 128K (GPT-4 Turbo), 200K (Gemini 1.5), even 1M (GPT-4 32K). But larger isn't free - doubling context quadruples compute cost due to O(n²) attention.</p>
+          <p>When you exceed the limit, oldest content gets truncated or uses sliding window. For long conversations, use summaries, RAG, or persist important context externally.</p>
           <h4>Key Points</h4>
           <ul>
             <li><strong>Context window</strong> = maximum text an LLM can see at once</li>
-            <li>Typical sizes: 4K, 8K, 32K, 128K, 1M tokens</li>
+            <li>Common sizes now: 32K (Claude), 128K (GPT-4), 200K-1M (Gemini)</li>
             <li>When exceeded, <strong>oldest text gets truncated</strong></li>
-            <li>Longer context = slower and more expensive</li>
+            <li>Quadratic O(n²) complexity makes longer contexts expensive</li>
+            <li>Solutions: RAG, summaries, external memory for long context</li>
           </ul>
         `,
         questions: [
@@ -673,17 +673,27 @@
               { a: 'C', text: 'O(n²)', correct: true },
               { a: 'D', text: 'O(1)' }
             ],
-            explanation: 'Self-attention computes pairwise attention scores between ALL token pairs. For a sequence of n tokens, this requires n×n attention matrix computations - O(n²). This quadratic complexity is why long contexts are expensive and why techniques like Flash Attention exist.'
+            explanation: 'Self-attention computes pairwise attention scores between ALL token pairs - O(n²). This quadratic complexity is why longer contexts are expensive.'
           },
           {
-            q: 'In a 128K context window, what happens to the earliest tokens during a long conversation?',
+            q: 'Modern context windows are 128K-1M tokens. What happens when you exceed this limit?',
             options: [
-              { a: 'A', text: 'They are stored in infinite memory' },
-              { a: 'B', text: 'They get compressed into embeddings' },
-              { a: 'C', text: 'They are evicted/rotated out', correct: true },
-              { a: 'D', text: 'They get higher attention weight' }
+              { a: 'A', text: 'The model crashes' },
+              { a: 'B', text: 'Oldest tokens get truncated/evicted', correct: true },
+              { a: 'C', text: 'Context automatically compresses' },
+              { a: 'D', text: 'It starts using disk storage' }
             ],
-            explanation: 'Most LLMs use sliding window attention or ring buffers. When the context fills up, the oldest tokens are silently dropped. Some models (like Claude) use " smart context management" to preserve important system instructions while rotating out conversation history.'
+            explanation: 'When the context window fills up, the oldest tokens are evicted. This is why long conversations "forget" earlier content.'
+          },
+          {
+            q: 'What is a key strategy for handling contexts longer than the window?',
+            options: [
+              { a: 'A', text: 'Use RAG to retrieve relevant chunks', correct: true },
+              { a: 'B', text: 'Increase temperature' },
+              { a: 'C', text: 'Repeat the question more times' },
+              { a: 'D', text: 'Use shorter prompts' }
+            ],
+            explanation: 'RAG (Retrieval Augmented Generation) fetches relevant information from external knowledge when context fills up.'
           },
           {
             q: 'What technique allows LLMs to effectively handle contexts larger than their native window?',
