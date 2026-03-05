@@ -451,7 +451,7 @@
       <div class="wizard-avatar">🧙</div>
       <h1>LLM Quest</h1>
       <p class="tagline">"Learn the magic of LLMs, one spell at a time!"</p>
-      <button class="btn btn-primary" onclick="showLevels()">Begin Journey</button>
+      <button class="btn btn-primary" onclick="playClickSound(); showLevels()">Begin Journey</button>
     </div>
 
     <!-- Level Selection -->
@@ -482,7 +482,7 @@
         <div id="quizContent"></div>
       </div>
       <div class="nav-buttons">
-        <button class="btn back-level-btn" onclick="showLevels()">← Back to Levels</button>
+        <button class="btn back-level-btn" onclick="playClickSound(); showLevels()">← Back to Levels</button>
       </div>
     </div>
 
@@ -495,7 +495,7 @@
         You've learned about transformers, tokens, embeddings, MCP, skills, and prompt engineering.<br><br>
         Your journey continues with advanced topics like RAG, fine-tuning, and multimodal AI!
       </p>
-      <button class="btn btn-primary" onclick="showLevels()">Play Again</button>
+      <button class="btn btn-primary" onclick="playClickSound(); showLevels()">Play Again</button>
     </div>
   </div>
 
@@ -1007,8 +1007,10 @@
       if (correct) {
         optionEl.classList.add('correct');
         showConfetti();
+        playCorrectSound();
       } else {
         optionEl.classList.add('wrong');
+        playWrongSound();
         // Show correct answer
         options.forEach(opt => {
           if (opt.dataset.correct === 'true') {
@@ -1052,6 +1054,7 @@
         if (!completedLevels.includes(levels[currentLevel].id)) {
           completedLevels.push(levels[currentLevel].id);
           saveProgress();
+          playLevelCompleteSound();
         }
         
         if (currentLevel >= levels.length - 1) {
@@ -1095,6 +1098,55 @@
       setTimeout(() => {
         container.innerHTML = '';
       }, 3500);
+    }
+
+    // Sound Effects using Web Audio API
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new AudioContext();
+      }
+    }
+
+    function playTone(frequency, duration, type = 'sine', volume = 0.3) {
+      if (!audioCtx) return;
+      const oscillator = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+      oscillator.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      oscillator.type = type;
+      oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+      gainNode.gain.setValueAtTime(volume, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+      oscillator.start(audioCtx.currentTime);
+      oscillator.stop(audioCtx.currentTime + duration);
+    }
+
+    function playCorrectSound() {
+      initAudio();
+      playTone(523.25, 0.15, 'sine', 0.25);
+      setTimeout(() => playTone(659.25, 0.15, 'sine', 0.25), 100);
+      setTimeout(() => playTone(783.99, 0.25, 'sine', 0.25), 200);
+    }
+
+    function playWrongSound() {
+      initAudio();
+      playTone(200, 0.3, 'sawtooth', 0.15);
+    }
+
+    function playLevelCompleteSound() {
+      initAudio();
+      const notes = [523.25, 659.25, 783.99, 1046.50];
+      notes.forEach((freq, i) => {
+        setTimeout(() => playTone(freq, 0.3, 'sine', 0.2), i * 120);
+      });
+    }
+
+    function playClickSound() {
+      initAudio();
+      playTone(800, 0.05, 'square', 0.08);
     }
 
     // Initialize
