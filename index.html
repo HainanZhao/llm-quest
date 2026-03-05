@@ -894,6 +894,7 @@
     let currentLevel = 0;
     let currentQuestion = 0;
     let completedLevels = [];
+    let userAnsweredCorrect = false;
 
     // Load progress
     function loadProgress() {
@@ -946,6 +947,7 @@
     function startLevel(index) {
       currentLevel = index;
       currentQuestion = 0;
+      userAnsweredCorrect = false;
       
       const level = levels[index];
       document.getElementById('welcome').style.display = 'none';
@@ -999,6 +1001,7 @@
     // Handle option selection
     function selectOption(optionEl, question) {
       const correct = optionEl.dataset.correct === 'true';
+      userAnsweredCorrect = correct;
       const options = document.querySelectorAll('.option');
       
       // Disable all options
@@ -1039,15 +1042,14 @@
 
     // Move to next question or complete level
     function nextQuestion() {
-      const options = document.querySelectorAll('.option');
-      const wasCorrect = Array.from(options).some(opt => opt.classList.contains('correct'));
-      
-      if (!wasCorrect) {
+      if (!userAnsweredCorrect) {
         // Reset for retry
         currentQuestion = 0;
+        userAnsweredCorrect = false;
         showQuestion();
       } else if (currentQuestion < 2) {
         currentQuestion++;
+        userAnsweredCorrect = false;
         showQuestion();
       } else {
         // Level complete!
