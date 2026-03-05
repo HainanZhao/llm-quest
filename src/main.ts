@@ -1,3 +1,4 @@
+import '../styles/main.css';
 import { loadProgress } from './core/game-state';
 import { initNavigation, navigateTo } from './core/navigation';
 import { renderLevelGrid, initGame } from './ui/components';
