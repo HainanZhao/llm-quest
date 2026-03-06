@@ -1,6 +1,7 @@
 import { levels } from '../data/levels';
 import type { Question } from '../types';
 import { isLevelUnlocked, isLevelCompleted, completeLevel } from '../core/game-state';
+import { navigateTo } from '../core/navigation';
 import { showConfetti, triggerVictory } from './effects';
 import { playCorrectSound, playWrongSound, playLevelCompleteSound, playVictorySound } from '../audio/audio';
 
@@ -51,18 +52,8 @@ export function startLevel(index: number): void {
   
   const level = levels[index];
   
-  // Hide other screens
-  document.getElementById('welcome')?.classList.add('hidden');
-  document.getElementById('levels')?.classList.add('hidden');
-  document.getElementById('game')?.classList.add('hidden');
-  document.getElementById('victory')?.classList.add('hidden');
-  
-  // Show intro
-  const intro = document.getElementById('intro');
-  if (intro) {
-    intro.classList.remove('hidden');
-    intro.style.display = 'block';
-  }
+  // Show intro screen using central navigation
+  navigateTo('intro', true, level.id);
   
   // Update progress
   const progress = (index / levels.length) * 100;
@@ -76,6 +67,12 @@ export function startLevel(index: number): void {
   document.getElementById('introLevelTitle')!.textContent = level.name;
   document.getElementById('introLevelTopic')!.textContent = level.topic;
   document.getElementById('introContentBox')!.innerHTML = level.content;
+  
+  // Update illustration
+  const illustrationContainer = document.getElementById('introIllustration');
+  if (illustrationContainer) {
+    illustrationContainer.innerHTML = level.illustration || '';
+  }
   
   // Also update game screen for when we navigate to it
   document.getElementById('levelBadge')!.textContent = level.icon;
@@ -91,18 +88,9 @@ export function startLevel(index: number): void {
  * Start quiz from intro
  */
 export function startQuiz(): void {
-  const intro = document.getElementById('intro');
-  const game = document.getElementById('game');
-  
-  if (intro) {
-    intro.classList.add('hidden');
-    intro.style.display = 'none';
-  }
-  
-  if (game) {
-    game.classList.remove('hidden');
-    game.style.display = 'block';
-  }
+  const level = levels[currentLevelIndex];
+  // Use central navigation to handle screen switching and history state
+  navigateTo('game', true, level.id);
   
   showQuestion();
 }
@@ -131,7 +119,9 @@ export function showQuestion(): void {
     </div>
     <div class="explanation" id="explanation">
       <strong>💡 ${question.explanation}</strong>
-      <button class="btn btn-retry" id="retryBtn" style="display:none">Continue</button>
+    </div>
+    <div class="quiz-actions" id="quizActions" style="display:none">
+      <button class="btn btn-primary" id="retryBtn">Continue</button>
     </div>
   `;
   
@@ -166,25 +156,32 @@ export function selectOption(optionEl: HTMLElement): void {
     });
   }
   
-  // Show explanation
   const explanation = document.getElementById('explanation');
   if (explanation) {
     explanation.classList.add('show');
+  }
+  
+  const quizActions = document.getElementById('quizActions');
+  if (quizActions) {
+    quizActions.style.display = 'flex';
   }
   
   const retryBtn = document.getElementById('retryBtn');
   if (retryBtn) {
     if (!correct) {
       retryBtn.textContent = 'Try Again';
-      retryBtn.style.display = 'inline-block';
+      retryBtn.classList.remove('btn-primary');
+      retryBtn.classList.add('btn-retry');
       retryBtn.onclick = () => retryQuestion();
     } else if (currentQuestionIndex < levels[currentLevelIndex].questions.length - 1) {
       retryBtn.textContent = 'Next Question';
-      retryBtn.style.display = 'inline-block';
+      retryBtn.classList.add('btn-primary');
+      retryBtn.classList.remove('btn-retry');
       retryBtn.onclick = () => nextQuestion();
     } else {
-      retryBtn.textContent = 'Continue';
-      retryBtn.style.display = 'inline-block';
+      retryBtn.textContent = 'Level Complete! ✨';
+      retryBtn.classList.add('btn-primary');
+      retryBtn.classList.remove('btn-retry');
       retryBtn.onclick = () => completeLevelFlow();
     }
   }
@@ -234,19 +231,11 @@ export function showVictory(): void {
   
   document.getElementById('completionTime')!.textContent = 'Completed: ' + timestamp;
   
-  // Hide other screens
-  document.getElementById('welcome')?.classList.add('hidden');
-  document.getElementById('levels')?.classList.add('hidden');
-  document.getElementById('intro')?.classList.add('hidden');
-  document.getElementById('game')?.classList.add('hidden');
+  // Show victory screen using central navigation
+  navigateTo('victory');
   
-  // Show victory
-  const victory = document.getElementById('victory');
-  if (victory) {
-    victory.classList.remove('hidden');
-    victory.style.display = 'block';
-    setTimeout(() => triggerVictory(), 10);
-  }
+  // Trigger effects
+  setTimeout(() => triggerVictory(), 10);
   
   playVictorySound();
 }
@@ -259,4 +248,19 @@ export function initGame(): void {
   (window as any).startLevel = startLevel;
   (window as any).startQuiz = startQuiz;
   (window as any).renderLevelGrid = renderLevelGrid;
+
+  // Listen for navigation events from the router
+  window.addEventListener('levelNavigate', (e: any) => {
+    const { screen, levelId } = e.detail;
+    const levelIndex = levels.findIndex(l => l.id === levelId);
+    if (levelIndex !== -1) {
+      if (screen === 'intro') {
+        startLevel(levelIndex);
+      } else if (screen === 'game') {
+        currentLevelIndex = levelIndex;
+        currentQuestionIndex = 0;
+        showQuestion();
+      }
+    }
+  });
 }

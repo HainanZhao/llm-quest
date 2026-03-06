@@ -19,6 +19,7 @@ export interface Level {
   topic: string;
   story: string;
   content: string;
+  illustration?: string;
   questions: Question[];
 }
 

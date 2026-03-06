@@ -6,11 +6,12 @@
   <title>LLM Quest: Become an AI Wizard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+  <script type="module" src="/src/main.ts"></script>
 </head>
 <body>
   <div class="container">
     <!-- Welcome Screen -->
-    <div id="welcome" style="display:block">
+    <div id="welcome" class="show">
       <div class="wizard-avatar">🧙</div>
       <h1>LLM Quest</h1>
       <p class="tagline">"Learn the magic of LLMs, one spell at a time!"</p>
@@ -35,6 +36,7 @@
           <span class="topic" id="introLevelTopic">LLM Fundamentals</span>
         </div>
       </div>
+      <div id="introIllustration" class="illustration-container"></div>
       <div class="content-box" id="introContentBox"></div>
       <div style="text-align: center; margin-top: 30px;">
         <button class="btn btn-primary" id="startQuizBtn" onclick="playClickSound(); startQuiz()">Start Quiz</button>
@@ -76,7 +78,6 @@
       <p class="victory-text">
         Congratulations! You've mastered the core concepts of LLMs and AI agents.<br><br>
         You've learned about transformers, tokens, embeddings, MCP, skills, and prompt engineering.<br><br>
-        Your journey continues with advanced topics like RAG, fine-tuning, and multimodal AI!
       </p>
       <button class="btn btn-primary" onclick="playClickSound(); showLevels()">Play Again</button>
     </div>
@@ -84,6 +85,5 @@
 
   <div class="confetti" id="confetti"></div>
 
-  <script type="module" src="src/main.ts"></script>
 </body>
 </html>

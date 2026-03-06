@@ -1,6 +1,6 @@
 import '../styles/main.css';
 import { loadProgress } from './core/game-state';
-import { initNavigation, navigateTo } from './core/navigation';
+import { initNavigation, navigateTo, handleHashChange } from './core/navigation';
 import { renderLevelGrid, initGame } from './ui/components';
 import { playClickSound } from './audio/audio';
 
@@ -11,11 +11,11 @@ function init(): void {
   // Load saved progress
   loadProgress();
   
+  // Initialize game components first (to set up listeners)
+  initGame();
+  
   // Initialize navigation
   initNavigation();
-  
-  // Initialize game components
-  initGame();
   
   // Render level grid
   renderLevelGrid();
@@ -29,12 +29,7 @@ function init(): void {
   };
   
   // Handle initial route
-  const hash = window.location.hash;
-  if (hash === '#levels' || hash === '#game') {
-    navigateTo(hash === '#levels' ? 'levels' : 'game', false);
-  } else {
-    navigateTo('welcome', false);
-  }
+  handleHashChange();
   
   console.log('LLM Quest initialized!');
 }
