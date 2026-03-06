@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: '/llm-quest-hainan-zhao-f7fa2ad3cad2ca67066b172ca946f7fa4063d0f1c/',
+  base: '/llm-quest/',
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
