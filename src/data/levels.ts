@@ -318,18 +318,18 @@ export const levels: Level[] = [
         q: 'What is the main reason output tokens cost more than input tokens in LLM APIs?',
         options: [
           { a: 'A', text: 'Output requires more compute' },
-          { a: 'B', text: 'Output is charged for storage' },
-          { a: 'C', text: 'Output requires more memory' },
-          { a: 'D', text: 'Output tokens are generated one-by-one (autoregressive), each needing a full forward pass', correct: true }
+          { a: 'B', text: 'Output tokens are generated one-by-one (autoregressive), each needing a full forward pass', correct: true },
+          { a: 'C', text: 'Output is charged for storage' },
+          { a: 'D', text: 'Output requires more memory' }
         ],
         explanation: 'Input tokens are processed in parallel in a single forward pass. Output tokens are generated one-by-one autoregressively - each token requires a full forward pass through the model. For a 100-token output, the model runs ~100 forward passes vs 1 for the input.'
       },
       {
         q: 'What causes the "context is wasted" problem in LLM APIs?',
         options: [
-          { a: 'A', text: 'Network latency' },
-          { a: 'B', text: 'Tokenization overhead' },
-          { a: 'C', text: 'Sending the full conversation history on every API call', correct: true },
+          { a: 'A', text: 'Sending the full conversation history on every API call', correct: true },
+          { a: 'B', text: 'Network latency' },
+          { a: 'C', text: 'Tokenization overhead' },
           { a: 'D', text: 'Model quantization' }
         ],
         explanation: 'Stateful API calls (like OpenAI Assistants) send the entire conversation history each time. After 20 messages of ~2K tokens each, you\'re paying for ~40K tokens just for context, not including the actual new query. Solutions: summarize old messages, use external memory, or implement custom context management.'
@@ -414,7 +414,7 @@ export const levels: Level[] = [
     icon: '📜',
     name: 'The Scroll',
     topic: 'Context Window',
-    story: 'In 2026, memory is nearly infinite. But even a wizard must choose what to focus on!',
+    story: 'In 2026, memory has expanded beyond our wildest dreams. But even a wizard must choose what to focus on!',
     illustration: `
     <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
       <style>
@@ -437,21 +437,21 @@ export const levels: Level[] = [
       <text x="20" y="115" class="label" fill="var(--accent-orange)">EVICTED / FORGOTTEN</text>
     </svg>`,
     content: `
-      <h3>Infinite Horizons</h3>
-      <p>We've moved past the "token limit" era. Modern 2026 models utilize <strong>Linear Attention</strong> and <strong>State Space Models (SSMs)</strong> to handle what we once thought was impossible.</p>
+      <h3>Expanding Horizons</h3>
+      <p>We've moved past the "token limit" era. Modern models utilize <strong>Linear Attention</strong> and <strong>State Space Models (SSMs)</strong> to handle massive contexts.</p>
       
-      <p><strong>1. The 10M+ Era:</strong> Models like <b>Gemini 3 Ultra</b> and <b>Claude 5</b> now support context windows of <strong>10 to 50 Million tokens</strong>. You can now drop an entire library of thousands of books or a decade of personal emails into a single prompt, and the model will "know" it all instantly.</p>
+      <p><strong>1. The 1M+ Era:</strong> Models like <b>Gemini 1.5 Pro</b> and <b>Claude 3.5</b> pioneered context windows of <strong>1 to 2 Million tokens</strong>. In 2026, high-end models push this even further, allowing you to drop an entire library of books or years of emails into a single prompt.</p>
       
-      <p><strong>2. Beyond Quadratic:</strong> The old O(n²) bottlenecks have been solved. Architectures like <b>Mamba</b> and <b>Transformer-XL 2</b> allow for near-linear scaling, meaning processing 1 million tokens is now as fast as processing 10 thousand used to be.</p>
+      <p><strong>2. Beyond Quadratic:</strong> The old O(n²) bottlenecks have been mitigated. Architectures like <b>Mamba</b> allow for near-linear scaling, meaning processing 1 million tokens is now vastly more efficient than older Transformers.</p>
       
-      <p><strong>3. Neural Memory:</strong> We no longer just "cache" prompts. Modern systems use <b>Dynamic Weight Updating</b>—the model literally learns from your conversation in real-time, creating a persistent "Neural Memory" that stays with your agent forever.</p>
+      <p><strong>3. Long-term Recall:</strong> We no longer just "cache" prompts. Modern systems use advanced <b>KV Caching</b> and <b>RAG</b> (Retrieval Augmented Generation) to maintain high accuracy even when the "needle" is buried in a massive "haystack."</p>
       
-      <h4>2026 Tech Specs</h4>
+      <h4>Tech Specs</h4>
       <ul>
-        <li><strong>Context Window</strong>: 10M - 100M+ tokens is the new standard</li>
-        <li><strong>Recall Accuracy</strong>: 99.9% "Needle in a Haystack" reliability</li>
+        <li><strong>Context Window</strong>: 1M - 10M+ tokens is the new standard</li>
+        <li><strong>Recall Accuracy</strong>: High "Needle in a Haystack" reliability</li>
         <li><strong>Linear Scaling</strong>: Massive speedups for ultra-long documents</li>
-        <li><strong>Persistent State</strong>: Models that remember you across every session</li>
+        <li><strong>State Management</strong>: Systems that maintain coherence over long sessions</li>
       </ul>
     `,
     questions: [
@@ -466,7 +466,7 @@ export const levels: Level[] = [
         explanation: 'Traditional self-attention computes pairwise attention scores between ALL token pairs - O(n²). This quadratic complexity is why contexts were limited before the invention of linear attention and SSMs.'
       },
       {
-        q: 'Modern context windows are 10M-100M+ tokens. What happens when you exceed this limit?',
+        q: 'Modern context windows can reach 1M-10M+ tokens. What happens when you exceed the active limit?',
         options: [
           { a: 'A', text: 'The model crashes' },
           { a: 'B', text: 'Context automatically compresses' },
@@ -476,14 +476,14 @@ export const levels: Level[] = [
         explanation: 'Even with massive windows, when the limit is reached, the oldest tokens are evicted from the active state. This is why session management remains important for multi-year conversations.'
       },
       {
-        q: 'What technique allows 2026 models to "learn" from a user permanently without retraining?',
+        q: 'What architecture is known for achieving near-linear scaling for long sequences?',
         options: [
-          { a: 'A', text: 'Dynamic Weight Updating (Neural Memory)', correct: true },
-          { a: 'B', text: 'Hardcoding responses' },
-          { a: 'C', text: 'Copying data to a text file' },
-          { a: 'D', text: 'Increasing the CPU speed' }
+          { a: 'A', text: 'Basic RNNs' },
+          { a: 'B', text: 'Mamba (State Space Models)', correct: true },
+          { a: 'C', text: 'Standard GPT-2' },
+          { a: 'D', text: 'Simple MLP' }
         ],
-        explanation: 'Dynamic Weight Updating allows the model to adjust small parts of its neural state based on your interactions, creating a "Neural Memory" that persists across sessions without the massive cost of a full training run.'
+        explanation: 'Mamba and other State Space Models (SSMs) provide a way to handle long sequences with O(n) complexity, avoiding the quadratic slowdown of traditional Transformers.'
       }
     ]
   },
@@ -544,8 +544,8 @@ export const levels: Level[] = [
         options: [
           { a: 'A', text: 'Nothing significant' },
           { a: 'B', text: 'It reduces token usage' },
-          { a: 'C', text: 'It often improves reasoning on complex tasks without explicit CoT examples', correct: true },
-          { a: 'D', text: 'It enables tool use' }
+          { a: 'C', text: 'It enables tool use' },
+          { a: 'D', text: 'It often improves reasoning on complex tasks without explicit CoT examples', correct: true }
         ],
         explanation: 'This is called "implicit CoT" - discovered by accident in instruction tuning. The phrase triggers the model to engage more careful reasoning pathways. It\'s now known as the "Anthropic trick" or "System 2 attention" - essentially telling the model to use more compute for reasoning.'
       },
@@ -612,8 +612,8 @@ export const levels: Level[] = [
         q: 'How does a 2026 LLM discover what specific tools are available on a remote MCP server?',
         options: [
           { a: 'A', text: 'The tools are hard-coded into the LLM during training' },
-          { a: 'B', text: 'The user must manually type the name of every tool' },
-          { a: 'C', text: 'The AI sends a standardized "list_tools" request to the server at runtime', correct: true },
+          { a: 'B', text: 'The AI sends a standardized "list_tools" request to the server at runtime', correct: true },
+          { a: 'C', text: 'The user must manually type the name of every tool' },
           { a: 'D', text: 'By scanning the server\'s hard drive' }
         ],
         explanation: 'Dynamic Discovery is a core pillar of MCP. It allows the model to be "future-proof"—it doesn\'t need to know about a tool beforehand. At runtime, it queries the server for its capabilities, receives the schemas, and immediately understands how to use them.'
@@ -631,8 +631,8 @@ export const levels: Level[] = [
       {
         q: 'What is "Context Pollution" in the context of MCP servers with hundreds of tools?',
         options: [
-          { a: 'A', text: 'When too many tool definitions consume the AI\'s limited context window, degrading performance', correct: true },
-          { a: 'B', text: 'When the tools contain malware' },
+          { a: 'A', text: 'When the tools contain malware' },
+          { a: 'B', text: 'When too many tool definitions consume the AI\'s limited context window, degrading performance', correct: true },
           { a: 'C', text: 'When the AI starts writing its own tools' },
           { a: 'D', text: 'When the network connection becomes unstable' }
         ],
@@ -673,77 +673,77 @@ export const levels: Level[] = [
       <rect x="20" y="30" width="110" height="45" class="box" fill="rgba(155, 77, 202, 0.2)" stroke="var(--accent-purple)" stroke-width="3" />
       <text x="35" y="58" class="label" font-weight="bold">CONDUCTOR</text>
       
-      <!-- Connection from Conductor to Ralph Loop -->
+      <!-- Connection from Conductor to ReAct Loop -->
       <path d="M75 75 V130 H150" class="path" marker-end="url(#arrow)" />
       
-      <!-- Ralph Loop -->
+      <!-- ReAct Loop -->
       <g transform="translate(150, 80)">
-        <text x="45" y="-10" class="label" fill="var(--accent-orange)">RALPH LOOP</text>
+        <text x="45" y="-10" class="label" fill="var(--accent-orange)">ReAct LOOP</text>
         <circle cx="100" cy="50" r="45" fill="none" stroke="var(--accent-blue)" stroke-width="2" stroke-dasharray="5 5">
           <animateTransform attributeName="transform" type="rotate" from="0 100 50" to="360 100 50" dur="10s" repeatCount="indefinite" />
         </circle>
         
         <g class="label" font-size="8">
           <text x="80" y="20">REASON</text>
-          <text x="130" y="55">ACT</text>
-          <text x="95" y="90">LEARN</text>
+          <text x="135" y="55">ACT</text>
+          <text x="95" y="90">OBSERVE</text>
           <text x="50" y="55">PLAN</text>
         </g>
         
         <!-- Connection to Harvest -->
         <path d="M145 50 H180" class="path" stroke="var(--accent-green)" marker-end="url(#arrow)" />
         <rect x="180" y="35" width="65" height="30" rx="5" fill="rgba(0, 255, 136, 0.1)" stroke="var(--accent-green)" />
-        <text x="188" y="55" class="label" font-size="9">HARVEST</text>
+        <text x="188" y="55" class="label" font-size="9">COMPLETE</text>
       </g>
     </svg>`,
     content: `
       <h3>Engineering Autonomy</h3>
-      <p>We no longer "write code" with AI; we <strong>orchestrate agents</strong>. In 2026, coding agents follow advanced architectural patterns that allow them to build complex systems with zero human intervention.</p>
+      <p>We no longer just "chat" with AI; we <strong>orchestrate agents</strong>. In 2026, coding agents follow advanced architectural patterns that allow them to build complex systems by breaking down tasks.</p>
       
-      <p><strong>1. The Conductor Pattern:</strong> Complex projects are too big for one brain. The <b>Conductor</b> is a master agent that doesn't code—it plans. It breaks a PR into small, verifiable "Tracks," spawns specialized workers, and manages the state of the entire repository.</p>
+      <p><strong>1. The Conductor Pattern:</strong> Complex projects are too big for one brain. A <b>Conductor</b> is a master agent that plans and orchestrates. It breaks a task into small, verifiable tracks and spawns specialized sub-agents to execute them.</p>
       
-      <p><strong>2. The Ralph Loop:</strong> Standard Reason-Act loops are obsolete. Modern agents use <b>Ralph (Reason-Act-Learn-Plan-Harvest)</b>. This loop ensures the agent learns from every failed test or lint error, updating its internal "memory" before planning the next move. It "harvests" the final code only when all validations pass.</p>
+      <p><strong>2. The ReAct Loop:</strong> Modern agents use the <b>ReAct (Reason + Act)</b> pattern. This loop ensures the agent reasons about its current state, takes an action, observes the result (like a test failure or compiler error), and then updates its plan before moving forward.</p>
       
-      <p><strong>3. Autonomous Refactoring:</strong> Agents now perform "Background Engineering"—constantly cleaning code, updating dependencies, and fixing bugs while the human architect focuses on high-level system design.</p>
+      <p><strong>3. Autonomous Engineering:</strong> Agents now perform "Background Engineering"—performing surgical code changes, running tests, and fixing bugs while the human architect focuses on high-level system design.</p>
       
-      <h4>Modern Agent Patterns</h4>
+      <h4>Agent Patterns</h4>
       <ul>
-        <li><strong>Conductor</strong>: Master-orchestrator for multi-file repo changes</li>
-        <li><strong>Ralph Loop</strong>: Self-correcting cycle of engineering</li>
+        <li><strong>Conductor</strong>: Orchestrator for multi-file repo changes</li>
+        <li><strong>ReAct Loop</strong>: Self-correcting cycle of reason and action</li>
         <li><strong>Track Management</strong>: Parallelizing independent features</li>
-        <li><strong>Test-Driven Agency</strong>: Agents that refuse to commit without 100% test coverage</li>
+        <li><strong>Validation-Driven</strong>: Agents that rely on automated tests to verify success</li>
       </ul>
     `,
     questions: [
       {
-        q: 'What is the main role of a "Conductor" agent in a 2026 development workflow?',
+        q: 'What is the main role of a "Conductor" agent in a development workflow?',
         options: [
           { a: 'A', text: 'To write the actual unit tests' },
           { a: 'B', text: 'To replace the version control system' },
           { a: 'C', text: 'To run the GPU hardware' },
-          { a: 'D', text: 'To plan, delegate tasks to sub-agents, and manage the repository state', correct: true }
+          { a: 'D', text: 'To plan, delegate tasks to sub-agents, and manage the project state', correct: true }
         ],
         explanation: 'The Conductor pattern focuses on high-level orchestration. It maintains the "big picture," ensuring that changes in one part of the codebase (handled by a sub-agent) don\'t break another part, while managing the overall project timeline.'
       },
       {
-        q: 'In the Ralph loop (Reason-Act-Learn-Plan-Harvest), what does "Harvest" signify?',
+        q: 'What does the "Observe" step in a ReAct loop typically involve?',
         options: [
-          { a: 'A', text: 'Finalizing and committing verified, tested code changes', correct: true },
-          { a: 'B', text: 'Collecting data from the web' },
-          { a: 'C', text: 'Scaling the model to more parameters' },
-          { a: 'D', text: 'Deleting old branches' }
+          { a: 'A', text: 'Analyzing the output of a tool or test result', correct: true },
+          { a: 'B', text: 'Watching the user type' },
+          { a: 'C', text: 'Checking the GPU temperature' },
+          { a: 'D', text: 'Waiting for a human to respond' }
         ],
-        explanation: 'The Harvest phase occurs only after the agent has validated its work through the previous cycles (Reasoning about the task, Acting, Learning from feedback, and Re-planning). It represents the successful completion of a track.'
+        explanation: 'In the Reason-Act-Observe-Plan loop, Observation is where the agent digests the feedback from its actions (like console logs or test errors) to inform its next step.'
       },
       {
-        q: 'How do specialized "Sub-agents" improve the speed of complex engineering tasks in 2026?',
+        q: 'How do specialized "Sub-agents" improve the speed of complex engineering tasks?',
         options: [
           { a: 'A', text: 'By sharing the same memory context to avoid repetition' },
           { a: 'B', text: 'By replacing the need for a central LLM' },
-          { a: 'C', text: 'By executing independent "Tracks" in parallel under the Conductor\'s guidance', correct: true },
+          { a: 'C', text: 'By executing independent tasks in parallel under the Conductor\'s guidance', correct: true },
           { a: 'D', text: 'By reducing the number of API calls needed' }
         ],
-        explanation: 'Sub-agents enable massive parallelism. A Conductor can spawn multiple specialized sub-agents to handle different "Tracks" (like refactoring multiple files or writing independent tests) simultaneously, drastically reducing the total time to complete a complex project.'
+        explanation: 'Sub-agents enable massive parallelism. A Conductor can delegate multiple independent tasks (like refactoring multiple files or writing independent tests) simultaneously, drastically reducing the total time to complete a complex project.'
       }
     ]
   },
