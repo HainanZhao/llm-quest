@@ -814,9 +814,9 @@ export const levels: Level[] = [
         q: "What does the Chinchilla scaling law suggest?",
         options: [
           { a: "A", text: "Optimal performance requires specific token-to-parameter ratio (~20:1)", correct: true },
-          { b: "B", text: "Bigger models always need more data" },
-          { c: "C", text: "Compute is more important than data" },
-          { d: "D", text: "Smaller models are always better" }
+          { a: "B", text: "Bigger models always need more data" },
+          { a: "C", text: "Compute is more important than data" },
+          { a: "D", text: "Smaller models are always better" }
         ],
         explanation: "Chinchilla found optimal performance when training with ~20 tokens per parameter - more data matters greatly."
       }
